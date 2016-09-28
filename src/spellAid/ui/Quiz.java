@@ -5,6 +5,8 @@ import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -32,8 +34,7 @@ import spellAid.ui.speaker.Speaker;
 public abstract class Quiz extends Application implements EventHandler<ActionEvent> {
 
 	// These fields represent the different states for the JButton.
-	private static final String ENTER = "Enter Word";
-	private static final String NEXTW = "Next Word";
+	private static final String ENTER = "Enter";
 	private static final String BEGIN = "Begin Test";
 	private static final String REPEAT = "Repeat word";
 
@@ -57,6 +58,8 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	
 	private GraphicsFactory gFac;
 	
+	private final String windowName;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
@@ -70,6 +73,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 			}
 
 		});
+		primaryStage.setTitle(windowName);
 		primaryStage.setScene(root);
 		primaryStage.show();
 	}
@@ -80,6 +84,8 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		// Creates a JFrame and sets all the GUI fields.
 		//super(frameName);
 		super();
+		
+		windowName = frameName;
 		
 		gFac = new GraphicsFactory();
 		
@@ -115,17 +121,16 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 		repeatButton.setOnAction(this);
 		repeatButton.setDisable(true);
-		//repeatButton.setEnabled(false);
 
 		testButton.setOnAction(this);
 		// Configure the button to be a constant size.
-		testButton.setPrefSize(150,	(int) testButton.getPrefHeight());
-
-		// Configure the JFrame (this) and add both panels.
-
+		testButton.setPrefWidth(150);
 
 		// Layout the panel which does the testing
 		quizPanel = new FlowPane(new Node[]{textField, repeatButton, testButton});
+		quizPanel.setAlignment(Pos.CENTER);
+		quizPanel.setPadding(new Insets(5));
+		quizPanel.setHgap(5);
 		
 		// Layout panels
 		BorderPane internalPanel = new BorderPane();
@@ -144,7 +149,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 		// Select text field
 		textField.requestFocus();
-		//textField.requestFocusInWindow();
 		textField.selectAll();
 		
 	}
@@ -291,12 +295,13 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		passedFirstTime();
 		enabledList.setShouldComponentBeEnabled(repeatButton, false);
 		repeatButton.setDisable(true);
+		textField.clear();
 		speaker.speak("correct");
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewTickShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = true;
 		currentTestNum++;
-		testButton.setText(NEXTW);
+		//speaker.speak(testList[currentTestNum]);
 	}
 
 	// If a user failed the first time, give them another chance to answer
@@ -319,8 +324,8 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 				testList[currentTestNum]);
 		testResults[currentTestNum] = true;
 		currentTestNum++;
-		testButton.setText(NEXTW);
 		hasChance = true;
+		//speaker.speak(testList[currentTestNum]);
 	}
 
 	// If a user failed both times, display a red graphic. Red means fail.
@@ -328,13 +333,14 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		failedSecondTime();
 		enabledList.setShouldComponentBeEnabled(repeatButton, false);
 		repeatButton.setDisable(true);
+		textField.clear();
 		speaker.speak("incorrect");
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewCrossShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = false;
 		currentTestNum++;
 		hasChance = true;
-		testButton.setText(NEXTW);
+		//speaker.speak(testList[currentTestNum]);
 	}
 
 	/*

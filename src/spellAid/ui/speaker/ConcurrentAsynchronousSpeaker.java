@@ -32,8 +32,8 @@ public abstract class ConcurrentAsynchronousSpeaker implements Speaker {
 			@Override
 			public void run() {
 				// Give line to script
-				String cmd = "echo '\"" + line.toUpperCase() 
-				+ "\"' | festival -b " + scriptFile;
+				String cmd = "echo '\"" + line + "\"' | festival -b " 
+				+ scriptFile;
 
 				ProcessBuilder processBuilder =
 						new ProcessBuilder("bash", "-c", cmd);

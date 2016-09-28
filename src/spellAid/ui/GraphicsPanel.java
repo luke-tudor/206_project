@@ -1,5 +1,6 @@
 package spellAid.ui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -30,6 +31,9 @@ public class GraphicsPanel extends GridPane {
 	public GraphicsPanel(int numberOfGraphics) {
 		super();
 
+		setPadding(new Insets(5));
+		setVgap(5);
+		
 		labels = new Label[numberOfGraphics];
 
 		//JPanel internalPanel = new JPanel();
@@ -44,7 +48,7 @@ public class GraphicsPanel extends GridPane {
 			labels[i].setContentDisplay(ContentDisplay.TOP);
 			labels[i].setAlignment(Pos.BOTTOM_CENTER);
 			labels[i].setPrefWidth(200);
-			labels[i].setPrefHeight(50);
+			//labels[i].setPrefHeight(50);
 			/*labels[i].setVerticalTextPosition(JLabel.BOTTOM);
 			labels[i].setHorizontalTextPosition(JLabel.CENTER);
 			labels[i].setPreferredSize(new Dimension(200,
@@ -53,7 +57,6 @@ public class GraphicsPanel extends GridPane {
 			add(labels[i], 0, i);
 		}
 		
-		//add(internalPanel);
 	}
 
 	/*
