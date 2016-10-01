@@ -26,11 +26,11 @@ public abstract class DisplayOptions extends Application implements EventHandler
 	
 	
 	// comboBoxs for  levels and voices
-	final ComboBox<String> voiceCombo;
-	final ComboBox<String> levelCombo;
+	private final ComboBox<String> voiceCombo;
+	private final ComboBox<String> levelCombo;
 	
 	//submit button
-	final Button submitButton;
+	private final Button submitButton;
 	
 	private Scene root;
 	
@@ -45,7 +45,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 	}
 	
 	
-	DisplayOptions(int numOfLevels, int currentLevel, String currentSpeech){
+	public DisplayOptions(int numOfLevels, int currentLevel, String currentSpeech){
 		super();
 		
 		List<String> voices = new ArrayList<>();
@@ -57,13 +57,13 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		List<String> levels = new ArrayList<>();
 
 		for (int i = 0; i < numOfLevels; i++){
-			levels.add("Level " + (i+1));
+			levels.add("NZCER Level " + (i+1));
 		}
 		
 		levelCombo = new ComboBox<>(FXCollections.observableList(levels));
 		
 		Label voiceLabel = new Label("Voice:");
-		Label levelLabel = new Label("Level:");
+		Label levelLabel = new Label("List:");
 		
 		submitButton = new Button("Submit");	
 		
@@ -82,6 +82,8 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		grid.add(voiceCombo, 2, 0);
 		grid.add(levelLabel, 0, 1);
 		grid.add(levelCombo, 2, 1);
+		voiceCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		levelCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		grid.add(submitButton, 1, 3);
 		
 		root = new Scene(grid);

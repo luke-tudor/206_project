@@ -66,10 +66,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	//currentSpeech is just the text on the combobox of the current voice
 	private String speechScript;
 	private String currentSpeech;
+	
+	private Stage primaryStage;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
+		this.primaryStage = primaryStage;
+		
 		ioHelper = new IOHelper();
 
 		createWordList();
@@ -97,13 +101,16 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
-			btn.setPrefSize(200, btn.getPrefHeight());
-			//btn.setPreferredSize(new Dimension(200,25));
+			btn.setPrefWidth(200);
 		}
 
 		Scene root = new Scene(grid);
 		primaryStage.setScene(root);
 		primaryStage.show();
+	}
+	
+	public SpellingAid() {
+		super();
 	}
 
 	/*
@@ -208,11 +215,11 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		};
 		try {
+			/*primaryStage.hide();
+			newQuiz.start(primaryStage);
+			primaryStage.centerOnScreen();*/
 			newQuiz.start(new Stage());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 	}
 
 	/*

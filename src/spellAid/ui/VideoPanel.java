@@ -30,6 +30,8 @@ public class VideoPanel extends BorderPane {
 
 	public VideoPanel () {
 		super();
+		
+		setPadding(new Insets(5));
 
 		// Create a panel which will contain the media component
 		BorderPane contentPanel = new BorderPane();
