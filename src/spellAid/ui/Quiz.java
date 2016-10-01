@@ -82,7 +82,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	// list of words to be tested.
 	public Quiz(String frameName, String[] list, String scriptFile) {
 		// Creates a JFrame and sets all the GUI fields.
-		//super(frameName);
 		super();
 		
 		windowName = frameName;
@@ -293,15 +292,16 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	// a green graphic with the word underneath. Green means pass.
 	private void firstTimePass(){
 		passedFirstTime();
-		enabledList.setShouldComponentBeEnabled(repeatButton, false);
-		repeatButton.setDisable(true);
-		textField.clear();
-		speaker.speak("correct");
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewTickShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = true;
 		currentTestNum++;
-		//speaker.speak(testList[currentTestNum]);
+		enabledList.setShouldComponentBeEnabled(repeatButton, true);
+		textField.clear();
+		if (currentTestNum != testList.length)
+			speaker.speak("correct... please spell " + testList[currentTestNum]);
+		else
+			speaker.speak("correct");
 	}
 
 	// If a user failed the first time, give them another chance to answer

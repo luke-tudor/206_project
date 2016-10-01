@@ -12,11 +12,16 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import spellAid.util.IOHelper;
 import spellAid.util.UniqueRandomListMaker;
@@ -101,10 +106,26 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
-			btn.setPrefWidth(200);
+			//btn.setPrefWidth(200);
+			btn.setPrefWidth(400);
+			btn.setPrefHeight(100);
+			btn.setFont(new Font(16));
 		}
+		
+		Label title = new Label("Welcome to VOXSPELL!");
+		title.setFont(new Font("Abyssinica SIL", 16));
+		
+		FlowPane flow = new FlowPane(title);
+		flow.setAlignment(Pos.CENTER);
+		
+		grid.setPadding(new Insets(50));
+		
+		BorderPane border = new BorderPane();
+		border.setPadding(new Insets(5));
+		border.setCenter(grid);
+		border.setTop(flow);
 
-		Scene root = new Scene(grid);
+		Scene root = new Scene(border);
 		primaryStage.setScene(root);
 		primaryStage.show();
 	}
