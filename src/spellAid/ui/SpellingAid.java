@@ -218,9 +218,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 					alert.getButtonTypes().setAll(yes, no);
 					alert.setTitle("Congratulations");
-					alert.setContentText("<html>You have passed this test.<br>"
-							+ "You are currently on level " + currentLevel + ".<br> "
-							+ "Would you like to move up to level " + (currentLevel + 1) + "?</html>");
+					alert.setContentText(">You have passed this test.<br>"
+							+ "You are currently on level " + currentLevel + ".\n "
+							+ "Would you like to move up to level " + (currentLevel + 1) + "?");
 
 					Optional<ButtonType> reply = alert.showAndWait();
 					if (reply.get() == yes) {

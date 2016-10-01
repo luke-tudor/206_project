@@ -253,10 +253,10 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 			
 			alert.getButtonTypes().setAll(yes, no);
 			alert.setTitle("Test Results");
-			alert.setContentText("<html>Well done!"
+			alert.setContentText("Well done!"
 					+ " You got " + numCorrect + " out of " 
-					+ testResults.length + ".<br>Would you like to see a "
-					+ "video?</html>");
+					+ testResults.length + ".\nWould you like to see a "
+					+ "video?");
 			
 			// Asks if user wants a video
 			Optional<ButtonType> reply = alert.showAndWait();

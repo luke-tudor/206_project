@@ -3,7 +3,6 @@ package spellAid.test;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import spellAid.ui.VideoPanel;
@@ -25,10 +24,8 @@ public class TestVideo extends Application {
 			
 		});
 		video = new VideoPanel();
-		BorderPane pane = new BorderPane();
-		pane.setCenter(video);
 		
-		Scene root = new Scene(pane);
+		Scene root = new Scene(video);
 		primaryStage.setScene(root);
 		primaryStage.show();
 		video.start();
