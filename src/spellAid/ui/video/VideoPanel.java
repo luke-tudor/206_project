@@ -1,4 +1,4 @@
-package spellAid.ui;
+package spellAid.ui.video;
 
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;

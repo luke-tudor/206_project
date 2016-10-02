@@ -1,4 +1,4 @@
-package spellAid.ui;
+package spellAid.ui.video;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class VideoManipulator extends VBox {
 
 		cPanel = new ControlPanel();
 
-		this.getChildren().add(cPanel);
+		getChildren().add(cPanel);
 		getChildren().add(submit);
 		setAlignment(Pos.CENTER);
 

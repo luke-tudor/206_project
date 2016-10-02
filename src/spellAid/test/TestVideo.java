@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import spellAid.ui.VideoPanel;
+import spellAid.ui.video.VideoPanel;
 
 public class TestVideo extends Application {
 	

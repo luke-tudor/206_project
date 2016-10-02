@@ -3,7 +3,7 @@ package spellAid.test;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import spellAid.ui.VideoManipulator;
+import spellAid.ui.video.VideoManipulator;
 
 public class TestVideoMaker extends Application {
 	

@@ -20,6 +20,7 @@ import javafx.stage.WindowEvent;
 import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
 import spellAid.ui.speaker.Speaker;
+import spellAid.ui.video.VideoPanel;
 
 /**
  * This class creates and runs the testing frame that the user sees when the 
