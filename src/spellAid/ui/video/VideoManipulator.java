@@ -1,22 +1,37 @@
 package spellAid.ui.video;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class VideoManipulator extends VBox {
 
 	private Button submit;
 
 	private ControlPanel cPanel;
+	
+	private ProgressBar progress;
+	
+	private long fileSize;
+	
+	private File newFile;
+	
+	private boolean processFinished;
 
 	public VideoManipulator() {
 		super();
@@ -25,17 +40,32 @@ public class VideoManipulator extends VBox {
 		submit.setOnAction(e -> createVideo());
 
 		cPanel = new ControlPanel();
+		
+		progress = new ProgressBar(0);
+		
+		fileSize = FileSystems.getDefault().getPath("big_buck_bunny_1_minute.mp4").toFile().length();
+		
+		newFile = FileSystems.getDefault().getPath("out.mp4").toFile();
+		
+		processFinished = true;
 
 		getChildren().add(cPanel);
 		getChildren().add(submit);
+		getChildren().add(progress);
 		setAlignment(Pos.CENTER);
 
 		setPadding(new Insets(5));
+		
+		Timeline timer = new Timeline(new KeyFrame(Duration.millis(200), e -> updateProgress()));
+		timer.setCycleCount(Animation.INDEFINITE);
+		timer.play();
 	}
 
 	private void createVideo() {
 
 		submit.setDisable(true);
+		
+		processFinished = false;
 
 		Thread worker = new Thread(new Runnable() {
 
@@ -61,6 +91,15 @@ public class VideoManipulator extends VBox {
 
 	private void asynchronousFinish() {
 		submit.setDisable(false);
+		processFinished = true;
+	}
+	
+	private void updateProgress() {
+		if (processFinished) {
+			progress.setProgress(1);
+		} else {
+			progress.setProgress((double)newFile.length()/fileSize);
+		}
 	}
 
 	private class ControlPanel extends GridPane {
