@@ -26,6 +26,8 @@ public abstract class ConcurrentAsynchronousSpeaker implements Speaker {
 
 	@Override
 	public final void speak(final String line) {
+		
+		componentsList.disableAllComponents();
 
 		Thread worker = new Thread(new Runnable() {
 
@@ -71,8 +73,6 @@ public abstract class ConcurrentAsynchronousSpeaker implements Speaker {
 		});
 
 		worker.setDaemon(true);
-
-		componentsList.disableAllComponents();
 
 		worker.start();
 	}
