@@ -27,7 +27,7 @@ public class VideoManipulator extends VBox {
 	
 	private ProgressBar progress;
 	
-	private long fileSize;
+	private double originalFileSize;
 	
 	private File newFile;
 	
@@ -43,7 +43,7 @@ public class VideoManipulator extends VBox {
 		
 		progress = new ProgressBar(0);
 		
-		fileSize = FileSystems.getDefault().getPath("big_buck_bunny_1_minute.mp4").toFile().length();
+		originalFileSize = (double)FileSystems.getDefault().getPath("big_buck_bunny_1_minute.mp4").toFile().length();
 		
 		newFile = FileSystems.getDefault().getPath("out.mp4").toFile();
 		
@@ -98,7 +98,7 @@ public class VideoManipulator extends VBox {
 		if (processFinished) {
 			progress.setProgress(1);
 		} else {
-			progress.setProgress((double)newFile.length()/fileSize);
+			progress.setProgress(newFile.length()/originalFileSize);
 		}
 	}
 
