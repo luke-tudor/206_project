@@ -9,10 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
-public class VideoManipulator extends BorderPane {
+public class VideoManipulator extends VBox {
 
 	private Button submit;
 
@@ -25,10 +25,11 @@ public class VideoManipulator extends BorderPane {
 		submit.setOnAction(e -> createVideo());
 
 		cPanel = new ControlPanel();
-		cPanel.setAlignment(Pos.CENTER);
 
-		setCenter(cPanel);
-		setBottom(submit);
+		this.getChildren().add(cPanel);
+		getChildren().add(submit);
+		setAlignment(Pos.CENTER);
+
 		setPadding(new Insets(5));
 	}
 
