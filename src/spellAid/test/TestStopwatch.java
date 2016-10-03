@@ -14,8 +14,10 @@ public class TestStopwatch extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		Scene root = new Scene(new Stopwatch());
+		Stopwatch watch = new Stopwatch();
+		Scene root = new Scene(watch);
 		primaryStage.setScene(root);
 		primaryStage.show();
+		watch.start();
 	}
 }

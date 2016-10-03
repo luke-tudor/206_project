@@ -65,7 +65,6 @@ public abstract class ConcurrentAsynchronousSpeaker implements Speaker {
 							// apply all asynchronously assigned states
 							componentsList.applyAllRecommendedStates();
 							asynchronousFinish();
-
 						}
 					});
 				} catch (InterruptedException | IOException e) {}
