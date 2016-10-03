@@ -24,12 +24,9 @@ import javafx.stage.Stage;
  */
 public abstract class DisplayOptions extends Application implements EventHandler<ActionEvent> {
 	
-	
-	// comboBoxs for  levels and voices
 	private final ComboBox<String> voiceCombo;
 	private final ComboBox<String> levelCombo;
 	
-	//submit button
 	private final Button submitButton;
 	
 	private Scene root;

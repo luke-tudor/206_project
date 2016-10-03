@@ -27,7 +27,6 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	private final Button displayButton;
 	private final Label displayArea;
 
-	//Only use these to prevent any changes to words
 	private final List<Set<String>> wordlist;
 	private final List<List<String>> masteredList;
 	private final List<List<String>> failedList;
@@ -37,13 +36,14 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	@Override
 	public void start(Stage primaryStage) {
 		
+		primaryStage.setTitle("Statistics");
 		primaryStage.setScene(root);
 		primaryStage.show();
 	}
 
-	DisplayStatistics(List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, int currentLevel){
+	public DisplayStatistics(List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, int currentLevel) {
 		super();
-		//super("Statistics");
+		
 		this.wordlist = wordlist;
 		this.masteredList = masteredList;
 		this.failedList = failedList;
@@ -94,10 +94,6 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 			}
 		}
 		
-		// Invalid level
-		if(levelToBeShown<1){
-			return;
-		}
 		/*
 		 * If there are no statistics (all the files are empty or don't exist), 
 		 * the program simply tells the user with a message.
@@ -110,16 +106,11 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		}
 		/*
 		 * This creates a string which contains all the statistics for each word
-		 * in the word list. The HTML is necessary because JLabels use HTML for
-		 * formatting.
+		 * in the word list.
 		 */
 		StringBuilder statsList = new StringBuilder();
 
 		WordCounter wordCounter = new WordCounter();	
-
-		// Tell the HTML that we want the string to be pre-formatted.
-		statsList.append("<html>");
-		statsList.append("<pre>");
 
 		for (String word : wordlist.get(levelToBeShown-1)){
 
@@ -140,8 +131,6 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 								word, numMastered, numFailed));
 			}
 		}
-		statsList.append("</pre>");
-		statsList.append("</html>");
 
 		displayArea.setText(statsList.toString());
 

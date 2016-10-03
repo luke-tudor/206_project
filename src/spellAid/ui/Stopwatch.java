@@ -13,22 +13,23 @@ public class Stopwatch extends Label {
 	private Timeline timer;
 
 	public Stopwatch() {
-		super("0:0:0");
+		super("00:00:00");
 		
 		timer = new Timeline(new KeyFrame(Duration.millis(50), e -> updateTime()));
 		timer.setCycleCount(Animation.INDEFINITE);
-		
-		startTime = System.nanoTime();
 	}
 	
 	public void start() {
+		startTime = System.nanoTime();
 		timer.play();
+	}
+	
+	public void stop() {
+		timer.stop();
 	}
 
 	private void updateTime() {
-		
 		long secDiff = (System.nanoTime() - startTime)/1_000_000_000;
-		
-		setText(String.format("%d:%d:%d", secDiff/3600%24, secDiff/60%60, secDiff%60));
+		setText(String.format("%02d:%02d:%02d", secDiff/3600%24, secDiff/60%60, secDiff%60));
 	}
 }
