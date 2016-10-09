@@ -72,8 +72,10 @@ public class VideoManipulator extends VBox {
 			@Override
 			public void run() {
 				String options = cPanel.getSettings();
-				String cmd = "ffmpeg -y -i big_buck_bunny_1_minute.mp4" 
-						+ options + " -strict -2 out.mp4";
+				//String cmd = "ffmpeg -y -i big_buck_bunny_1_minute.mp4" 
+				//		+ options + " -strict -2 out.mp4";
+				String cmd = "./ffmpeg -y -i big_buck_bunny_1_minute.mp4" 
+								+ options + " -strict -2 out.mp4";
 				ProcessBuilder pb = new ProcessBuilder("bash", "-c", cmd);
 				try {
 					Process process = pb.start();
@@ -137,8 +139,9 @@ public class VideoManipulator extends VBox {
 
 		private String getSettings() {
 			StringBuilder sb = new StringBuilder();
-			sb.append(" -vf \"drawtext=/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf"
-					+ ":text=" + text.getText() +":fontsize=30:x=(w-text_w)/2:y=(h-text_h)/2\"");
+			//sb.append(" -vf \"drawtext=/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-R.ttf"
+			//		+ ":text=" + text.getText() +":fontsize=30:x=(w-text_w)/2:y=(h-text_h)/2\"");
+			sb.append(" -vf \"drawtext=DejaVuSans.ttf" + ":text=" + text.getText() +":fontsize=30:x=(w-text_w)/2:y=(h-text_h)/2\"");
 			if (negate.isSelected()) {
 				sb.append(",negate");
 			}
