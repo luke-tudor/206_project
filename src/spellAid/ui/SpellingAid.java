@@ -225,7 +225,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * mastered word for each word in the word list.
 	 */
 	private void displayStatistics() {
-		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,sublists.indexOf(currentSubList));
+		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,sublists, sublists.indexOf(currentSubList));
 		try {
 			displayStatistics.start(new Stage());
 		} catch (Exception e) {}
@@ -257,7 +257,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				createWordList();
 				createStatsLists();
 				sublistCombo.setItems(FXCollections.observableList(sublists));
-				sublistCombo.getSelectionModel().select(sublists.indexOf(currentSubList));
+				currentSubList = sublists.get(0);
+				sublistCombo.getSelectionModel().select(currentSubList);
 			}
 
 		};

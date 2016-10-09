@@ -1,6 +1,5 @@
 package spellAid.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ import javafx.stage.Stage;
  */
 public class DisplayStatistics extends Application implements EventHandler<ActionEvent> {
 
-	private final ComboBox<String> levelSelectCombo;
+	private final ComboBox<String> sublistSelectCombo;
 	private final Button displayButton;
 	private final Label displayArea;
 
@@ -41,31 +40,27 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		primaryStage.show();
 	}
 
-	public DisplayStatistics(List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, int currentLevel) {
+	public DisplayStatistics(List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, List<String> sublists, int currentLevel) {
 		super();
 		
 		this.wordlist = wordlist;
 		this.masteredList = masteredList;
 		this.failedList = failedList;
 		
-		List<String> levels = new ArrayList<>();
-		for (int i = 0; i < wordlist.size(); i++){
-			levels.add("Level " + (i+1) + " Statistics");
-		}
-		levelSelectCombo = new ComboBox<>(FXCollections.observableList(levels));
+		sublistSelectCombo = new ComboBox<>(FXCollections.observableList(sublists));
 
 		displayButton = new Button("Display Statistics");
 		displayArea = new Label();
 		
-		levelSelectCombo.setOnAction(this);
+		sublistSelectCombo.setOnAction(this);
 		displayButton.setOnAction(this);
 		
 		updateStatisticsDisplay(currentLevel);
-		levelSelectCombo.getSelectionModel().select(currentLevel);
+		sublistSelectCombo.getSelectionModel().select(currentLevel);
 		
 		GridPane controls = new GridPane();
 		controls.setHgap(5);
-		controls.add(levelSelectCombo, 0, 0);
+		controls.add(sublistSelectCombo, 0, 0);
 		controls.add(displayButton, 1, 0);
 		
 		GridPane grid = new GridPane();
@@ -139,7 +134,7 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	@Override
 	public void handle(ActionEvent e) {
 		if(e.getSource() == displayButton){
-			updateStatisticsDisplay(levelSelectCombo.getSelectionModel().getSelectedIndex());
+			updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
 		}
 	}
 }
