@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javafx.application.Application;
@@ -16,7 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -215,30 +213,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			}
 
 			@Override
-			protected void passedQuiz() {
-				if (currentLevel < wordlist.size()) {
-					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-
-					ButtonType yes = new ButtonType("Yes");
-					ButtonType no = new ButtonType("No");
-
-					alert.getButtonTypes().setAll(yes, no);
-					alert.setTitle("Congratulations");
-					alert.setContentText(">You have passed this test.<br>"
-							+ "You are currently on level " + currentLevel + ".\n "
-							+ "Would you like to move up to level " + (currentLevel + 1) + "?");
-
-					Optional<ButtonType> reply = alert.showAndWait();
-					if (reply.get() == yes) {
-						currentLevel++;
-					}
-				} else {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					alert.setTitle("Well Done!");
-					alert.setContentText("Well done, you have finished the hardest level!");
-					alert.showAndWait();
-				}
-			}
+			protected void passedQuiz() {}
 
 		};
 		try {
