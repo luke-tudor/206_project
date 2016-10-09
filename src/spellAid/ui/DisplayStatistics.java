@@ -61,7 +61,7 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		displayButton.setOnAction(this);
 		
 		updateStatisticsDisplay(currentLevel);
-		levelSelectCombo.getSelectionModel().select(currentLevel - 1);
+		levelSelectCombo.getSelectionModel().select(currentLevel);
 		
 		GridPane controls = new GridPane();
 		controls.setHgap(5);
@@ -98,8 +98,8 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		 * If there are no statistics (all the files are empty or don't exist), 
 		 * the program simply tells the user with a message.
 		 */
-		if (masteredList.get(levelToBeShown-1).isEmpty() 
-				&& failedList.get(levelToBeShown-1).isEmpty()) {
+		if (masteredList.get(levelToBeShown).isEmpty() 
+				&& failedList.get(levelToBeShown).isEmpty()) {
 			displayArea.setText("No Statistics to Display");
 			
 			return;
@@ -112,12 +112,12 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 
 		WordCounter wordCounter = new WordCounter();	
 
-		for (String word : wordlist.get(levelToBeShown-1)){
+		for (String word : wordlist.get(levelToBeShown)){
 
 			int numMastered = wordCounter.wordCount(word,
-					masteredList.get(levelToBeShown-1));
+					masteredList.get(levelToBeShown));
 			int numFailed = wordCounter.wordCount(word,
-					failedList.get(levelToBeShown-1));
+					failedList.get(levelToBeShown));
 
 			/*
 			 * Only attempted words are added to the statistics, hence the if
@@ -139,7 +139,7 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	@Override
 	public void handle(ActionEvent e) {
 		if(e.getSource() == displayButton){
-			updateStatisticsDisplay(levelSelectCombo.getSelectionModel().getSelectedIndex() + 1);
+			updateStatisticsDisplay(levelSelectCombo.getSelectionModel().getSelectedIndex());
 		}
 	}
 }

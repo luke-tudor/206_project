@@ -23,16 +23,17 @@ import javafx.stage.Stage;
  *
  */
 public abstract class DisplayOptions extends Application implements EventHandler<ActionEvent> {
-	
+
 	private final ComboBox<String> voiceCombo;
-	private final ComboBox<String> levelCombo;
-	
+	private final ComboBox<String> listCombo;
+	private final ComboBox<String> sublistCombo;
+
 	private final Button submitButton;
-	
+
 	private Scene root;
-	
+
 	private Stage primaryStage;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -40,68 +41,74 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		primaryStage.setScene(root);
 		primaryStage.show();
 	}
-	
-	
-	public DisplayOptions(int numOfLevels, int currentLevel, String currentSpeech){
+
+
+	public DisplayOptions(String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
 		super();
-		
+
 		List<String> voices = new ArrayList<>();
 		voices.add("NZ voice");
 		voices.add("USA voice");
-		
-		voiceCombo = new ComboBox<>(FXCollections.observableList(voices));
-		
-		List<String> levels = new ArrayList<>();
 
-		for (int i = 0; i < numOfLevels; i++){
-			levels.add("NZCER Level " + (i+1));
-		}
-		
-		levelCombo = new ComboBox<>(FXCollections.observableList(levels));
-		
+		voiceCombo = new ComboBox<>(FXCollections.observableList(voices));
+
+		listCombo = new ComboBox<>(FXCollections.observableArrayList(lists));
+
+		sublistCombo = new ComboBox<>(FXCollections.observableList(sublists));
+
 		Label voiceLabel = new Label("Voice:");
-		Label levelLabel = new Label("List:");
-		
+		Label listLabel = new Label("List:");
+		Label sublistLabel = new Label("Sub-list:");
+
 		submitButton = new Button("Submit");	
-		
-		levelCombo.getSelectionModel().select(currentLevel - 1);
+
 		voiceCombo.getSelectionModel().select(currentSpeech);
-		
+		listCombo.getSelectionModel().select(currentList);
+		sublistCombo.getSelectionModel().select(currentSubList);
+
 		voiceCombo.setOnAction(this);
-		levelCombo.setOnAction(this);
+		listCombo.setOnAction(this);
+		sublistCombo.setOnAction(this);
 		submitButton.setOnAction(this);
-		
+
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
 		grid.setVgap(5);
 		grid.setPadding(new Insets(5));
 		grid.add(voiceLabel, 0, 0);
 		grid.add(voiceCombo, 2, 0);
-		grid.add(levelLabel, 0, 1);
-		grid.add(levelCombo, 2, 1);
+		grid.add(listLabel, 0, 1);
+		grid.add(listCombo, 2, 1);
+		grid.add(sublistLabel, 0, 2);
+		grid.add(sublistCombo, 2, 2);
 		voiceCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		levelCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		listCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		sublistCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		grid.add(submitButton, 1, 3);
-		
+
 		root = new Scene(grid);
 	}
-	
+
 	// Overridden by the SpellingAid class to change the voice
 	protected abstract void changeSpeech(String voice);
-	
+
 	// Overridden by the SpellingAid class to change level
-	protected abstract void changeLevel(int level);
+	protected abstract void changeSublist(String sublist);
+
+	protected abstract void changeList(String list, ComboBox<String> sublistCombo);
 
 	@Override
 	public void handle(ActionEvent e) {
 		if (e.getSource() == voiceCombo) {
 			changeSpeech(voiceCombo.getSelectionModel().getSelectedItem());
-		} else if (e.getSource() == levelCombo) {
-			changeLevel(levelCombo.getSelectionModel().getSelectedIndex() + 1);
+		} else if (e.getSource() == listCombo) {
+			changeList(listCombo.getSelectionModel().getSelectedItem(), sublistCombo);
+		} else if (e.getSource() == sublistCombo) {
+			changeSublist(sublistCombo.getSelectionModel().getSelectedItem());
 		} else if (e.getSource() == submitButton) {
 			primaryStage.hide();
 		}
-		
+
 	}
 
 }

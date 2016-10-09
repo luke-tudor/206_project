@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,12 +16,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import spellAid.util.IOHelper;
 import spellAid.util.UniqueRandomListMaker;
@@ -42,8 +43,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * to refer to the necessary text files. This is done so that the actual
 	 * name of the files is only found in one place, here.
 	 */
-	private static final Path WORDLIST = 
-			FileSystems.getDefault().getPath("NZCER-spelling-lists.txt");
+	private static Path WORDLIST = 
+			FileSystems.getDefault().getPath("user_lists/NZCER-spelling-lists.txt");
+	
+	private static final String[] WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
 
 	private static final String NZVOICE = "nzvoice.scm";
 	private static final String USVOICE = "usvoice.scm";
@@ -53,7 +56,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private Button newQuiz;
 	private Button viewStatistics;
-	private Button addList;
 	private Button options;
 
 	/*
@@ -63,10 +65,11 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private IOHelper ioHelper;
 
 	private List<Set<String>> wordlist;
+	private List<String> sublists;
 	private List<List<String>> masteredList;
 	private List<List<String>> failedList;
-
-	private int currentLevel;
+	
+	private String currentSubList;
 
 	//currentSpeech is just the text on the combobox of the current voice
 	private String speechScript;
@@ -84,14 +87,11 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		createWordList();
 		createStatsLists();
 
-		currentLevel = 1;
-
 		speechScript = NZVOICE;
 		currentSpeech = "NZ voice";
 
 		newQuiz = new Button("New Quiz");
 		viewStatistics = new Button("View Statistics");
-		addList = new Button("Add List");
 		options = new Button("Options");
 
 		GridPane grid = new GridPane();
@@ -99,16 +99,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		grid.setVgap(5);
 		grid.add(newQuiz, 0, 0);
 		grid.add(viewStatistics, 0, 1);
-		grid.add(addList, 0, 2);
-		grid.add(options, 0, 3);
+		grid.add(options, 0, 2);
 
 		// This simply adds this object as a listener for these buttons
 		// and adds all the buttons to the frame.
-		Button[] buttons = {newQuiz, viewStatistics, addList, options};
+		Button[] buttons = {newQuiz, viewStatistics, options};
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
-			//btn.setPrefWidth(200);
 			btn.setPrefWidth(400);
 			btn.setPrefHeight(100);
 			btn.setFont(new Font(16));
@@ -146,8 +144,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			runNewQuiz();
 		} else if (e.getSource() == viewStatistics) {
 			displayStatistics();
-		} else if (e.getSource() == addList) {
-			addList();
 		} else if (e.getSource() == options) {
 			displayOptionsWindow();
 		}
@@ -159,7 +155,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private void runNewQuiz() {
 		// This line converts the word list file to a list.
-		Set<String> uniqueLines = wordlist.get(currentLevel - 1);
+		Set<String> uniqueLines = wordlist.get(sublists.indexOf(currentSubList));
 
 		/*
 		 *  If the list is empty, then the file contained nothing or didn't exist.
@@ -196,12 +192,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void passedFirstTime() {
-				masteredList.get(currentLevel - 1).add(getLastTestedWord());
+				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
 			protected void passedSecondTime() {
-				masteredList.get(currentLevel - 1).add(getLastTestedWord());
+				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
@@ -209,7 +205,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void failedSecondTime() {
-				failedList.get(currentLevel - 1).add(getLastTestedWord());
+				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
@@ -229,36 +225,39 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * mastered word for each word in the word list.
 	 */
 	private void displayStatistics() {
-		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,currentLevel);
+		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,sublists.indexOf(currentSubList));
 		try {
 			displayStatistics.start(new Stage());
 		} catch (Exception e) {}
 	}
-	
-	private void addList() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath("user_lists").toFile());
-		fileChooser.showOpenDialog(primaryStage);
-	}
 
 	private void displayOptionsWindow() {
 		Application displayOptions =
-				new DisplayOptions(wordlist.size(), currentLevel, currentSpeech) {
+				new DisplayOptions(WORDLISTS, WORDLIST.toFile().getName(), sublists, currentSubList, currentSpeech) {
 
 			@Override
 			protected void changeSpeech(String voice) {
-				if(voice.equals("NZ voice")){
+				if (voice.equals("NZ voice")) {
 					currentSpeech= "NZ voice";
 					speechScript = NZVOICE;
-				}else if(voice.equals("USA voice")){
+				} else if(voice.equals("USA voice")) {
 					currentSpeech="USA voice";
 					speechScript = USVOICE;
 				}
 			}
 
 			@Override
-			protected void changeLevel(int level){
-				currentLevel = level;
+			protected void changeSublist(String sublist) {
+				currentSubList = sublist;
+			}
+			
+			@Override
+			protected void changeList(String list, ComboBox<String> sublistCombo) {
+				WORDLIST = FileSystems.getDefault().getPath("user_lists/" + list);
+				createWordList();
+				createStatsLists();
+				sublistCombo.setItems(FXCollections.observableList(sublists));
+				sublistCombo.getSelectionModel().select(sublists.indexOf(currentSubList));
 			}
 
 		};
@@ -270,16 +269,19 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private void createWordList() {
 		List<String> unfilteredList = ioHelper.readAllLines(WORDLIST);
 		wordlist = new ArrayList<Set<String>>();
+		sublists = new ArrayList<String>();
 
 		int listNumber = -1;
 		for (String line : unfilteredList) {
 			if (line.startsWith("%")) {
 				listNumber++;
 				wordlist.add(new HashSet<String>());
+				sublists.add(line.substring(1, line.length()));
 			} else {
 				wordlist.get(listNumber).add(line);
 			}
 		}
+		currentSubList = sublists.get(0);
 	}
 
 	private void createStatsLists() {
