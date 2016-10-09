@@ -22,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import spellAid.util.IOHelper;
 import spellAid.util.UniqueRandomListMaker;
@@ -54,6 +55,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private Button newQuiz;
 	private Button viewStatistics;
+	private Button addList;
 	private Button options;
 
 	/*
@@ -91,6 +93,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		newQuiz = new Button("New Quiz");
 		viewStatistics = new Button("View Statistics");
+		addList = new Button("Add List");
 		options = new Button("Options");
 
 		GridPane grid = new GridPane();
@@ -98,11 +101,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		grid.setVgap(5);
 		grid.add(newQuiz, 0, 0);
 		grid.add(viewStatistics, 0, 1);
-		grid.add(options, 0, 2);
+		grid.add(addList, 0, 2);
+		grid.add(options, 0, 3);
 
 		// This simply adds this object as a listener for these buttons
 		// and adds all the buttons to the frame.
-		Button[] buttons = {newQuiz, viewStatistics, options};
+		Button[] buttons = {newQuiz, viewStatistics, addList, options};
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
@@ -144,6 +148,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			runNewQuiz();
 		} else if (e.getSource() == viewStatistics) {
 			displayStatistics();
+		} else if (e.getSource() == addList) {
+			addList();
 		} else if (e.getSource() == options) {
 			displayOptionsWindow();
 		}
@@ -252,6 +258,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		try {
 			displayStatistics.start(new Stage());
 		} catch (Exception e) {}
+	}
+	
+	private void addList() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath("user_lists").toFile());
+		fileChooser.showOpenDialog(primaryStage);
 	}
 
 	private void displayOptionsWindow() {
