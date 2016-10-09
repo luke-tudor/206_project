@@ -11,7 +11,7 @@ public class NewList extends BorderPane {
 
 	public NewList() {
 		fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath("").toFile());
+		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
 		fileChooser.showOpenDialog(null);
 	}
 }
