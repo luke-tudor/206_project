@@ -11,7 +11,7 @@ public class TestSpeaker extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		ConcurrentAsynchronousSpeaker speaker =
-				new ConcurrentAsynchronousSpeaker(new AsynchronousComponentEnabler(new Node[0], false), "nzvoice.scm") {
+				new ConcurrentAsynchronousSpeaker(new AsynchronousComponentEnabler(new Node[0], false), "voices/nzvoice.scm") {
 
 			@Override
 			protected void asynchronousFinish() {

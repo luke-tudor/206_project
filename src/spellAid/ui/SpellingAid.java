@@ -48,8 +48,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	
 	private static final String[] WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
 
-	private static final String NZVOICE = "nzvoice.scm";
-	private static final String USVOICE = "usvoice.scm";
+	private static final String NZVOICE = "voices/nzvoice.scm";
+	private static final String USVOICE = "voices/usvoice.scm";
 
 	/*
 	 * These fields refer to the buttons in the GUI.
