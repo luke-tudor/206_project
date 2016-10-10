@@ -38,7 +38,7 @@ public class VideoPanel extends BorderPane {
 		contentPanel.setPrefSize(600, 400);
 
 		Media video = null;
-		Path path = FileSystems.getDefault().getPath("big_buck_bunny_1_minute.mp4");
+		Path path = FileSystems.getDefault().getPath("videos/big_buck_bunny_1_minute.mp4");
 		try {
 			video = new Media(path.toUri().toURL().toString());
 		} catch (MalformedURLException e) {}

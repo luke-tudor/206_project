@@ -43,9 +43,9 @@ public class VideoManipulator extends VBox {
 		
 		cPanel = new ControlPanel();
 		
-		originalFileSize = FileSystems.getDefault().getPath("big_buck_bunny_1_minute.mp4").toFile().length();
+		originalFileSize = FileSystems.getDefault().getPath("videos/big_buck_bunny_1_minute.mp4").toFile().length();
 		
-		newFile = FileSystems.getDefault().getPath("out.mp4").toFile();
+		newFile = FileSystems.getDefault().getPath("videos/out.mp4").toFile();
 		
 		processFinished = true;
 		
@@ -71,8 +71,8 @@ public class VideoManipulator extends VBox {
 			@Override
 			public void run() {
 				String options = cPanel.getSettings();
-				String cmd = "ffmpeg -y -i big_buck_bunny_1_minute.mp4" 
-						+ options + " -strict -2 out.mp4";
+				String cmd = "ffmpeg -y -i videos/big_buck_bunny_1_minute.mp4" 
+						+ options + " -strict -2 videos/out.mp4";
 				ProcessBuilder pb = new ProcessBuilder("bash", "-c", cmd);
 				try {
 					Process process = pb.start();
