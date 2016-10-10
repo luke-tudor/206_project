@@ -1,5 +1,0 @@
-%New Test
-my
-test
-went
-well
