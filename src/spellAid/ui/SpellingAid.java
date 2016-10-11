@@ -101,12 +101,13 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		options = new Button("Options");
 
 		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(5));
+		grid.setPadding(new Insets(50));
 		grid.setVgap(5);
 		grid.add(newQuiz, 0, 0);
 		grid.add(viewStatistics, 0, 1);
 		grid.add(addList, 0, 2);
 		grid.add(options, 0, 3);
+		grid.setAlignment(Pos.CENTER);
 
 		// This simply adds this object as a listener for these buttons
 		// and adds all the buttons to the frame.
@@ -125,15 +126,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		FlowPane flow = new FlowPane(title);
 		flow.setAlignment(Pos.CENTER);
 
-		grid.setPadding(new Insets(50));
+		BorderPane root = new BorderPane();
+		root.setPadding(new Insets(5));
+		root.setCenter(grid);
+		root.setTop(flow);
+		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 
-		BorderPane border = new BorderPane();
-		border.setPadding(new Insets(5));
-		border.setCenter(grid);
-		border.setTop(flow);
-
-		Scene root = new Scene(border);
-		primaryStage.setScene(root);
+		Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
@@ -283,7 +283,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		};
 		try {
-			displayOptions.start(new Stage());
+			displayOptions.start(primaryStage);
 		} catch (Exception e) {}
 	}
 

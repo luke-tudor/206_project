@@ -30,7 +30,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 
 	private final Button submitButton;
 
-	private Scene root;
+	private Scene scene;
 
 	private Stage primaryStage;
 
@@ -38,7 +38,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Options");
-		primaryStage.setScene(root);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
@@ -71,22 +71,23 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		sublistCombo.setOnAction(this);
 		submitButton.setOnAction(this);
 
-		GridPane grid = new GridPane();
-		grid.setHgap(5);
-		grid.setVgap(5);
-		grid.setPadding(new Insets(5));
-		grid.add(voiceLabel, 0, 0);
-		grid.add(voiceCombo, 2, 0);
-		grid.add(listLabel, 0, 1);
-		grid.add(listCombo, 2, 1);
-		grid.add(sublistLabel, 0, 2);
-		grid.add(sublistCombo, 2, 2);
+		GridPane root = new GridPane();
+		root.setHgap(5);
+		root.setVgap(5);
+		root.setPadding(new Insets(5));
+		root.add(voiceLabel, 0, 0);
+		root.add(voiceCombo, 2, 0);
+		root.add(listLabel, 0, 1);
+		root.add(listCombo, 2, 1);
+		root.add(sublistLabel, 0, 2);
+		root.add(sublistCombo, 2, 2);
 		voiceCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		listCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		sublistCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		grid.add(submitButton, 1, 3);
+		root.add(submitButton, 1, 3);
+		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 
-		root = new Scene(grid);
+		scene = new Scene(root);
 	}
 
 	// Overridden by the SpellingAid class to change the voice
