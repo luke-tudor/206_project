@@ -2,6 +2,7 @@ package spellAid.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,6 +56,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
+	
+	private static String STYLESHEET;
 
 	/*
 	 * These fields refer to the buttons in the GUI.
@@ -84,6 +87,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private Stage primaryStage;
 	
 	private Scene scene;
+	
+	static {
+		try {
+			STYLESHEET = FileSystems.getDefault().getPath("style/appstyle.css").toUri().toURL().toString();
+		} catch (MalformedURLException e) {}
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -121,6 +130,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			btn.setPrefWidth(400);
 			btn.setPrefHeight(100);
 			btn.setFont(new Font(16));
+			btn.getStylesheets().add(STYLESHEET);
 		}
 
 		Label title = new Label("Welcome to VOXSPELL!");
@@ -136,6 +146,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 
 		scene = new Scene(root);
+		scene.getStylesheets().add(STYLESHEET);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
