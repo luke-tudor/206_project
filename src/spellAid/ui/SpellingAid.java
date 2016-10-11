@@ -237,7 +237,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * mastered word for each word in the word list.
 	 */
 	private void displayStatistics() {
-		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,sublists, sublists.indexOf(currentSubList));
+		Application displayStatistics = new DisplayStatistics(scene, wordlist,masteredList,failedList,sublists, sublists.indexOf(currentSubList));
 		try {
 			displayStatistics.start(primaryStage);
 		} catch (Exception e) {}
@@ -257,7 +257,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private void displayOptionsWindow() {
 		Application displayOptions =
-				new DisplayOptions(WORDLISTS, WORDLIST.toFile().getName(), sublists, currentSubList, currentSpeech) {
+				new DisplayOptions(scene, WORDLISTS, WORDLIST.toFile().getName(), sublists, currentSubList, currentSpeech) {
 
 			@Override
 			protected void changeSpeech(String voice) {

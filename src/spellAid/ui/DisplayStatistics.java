@@ -8,11 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 /**
  * 
@@ -32,15 +35,17 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	
 	private Scene scene;
 	
+	private Stage primaryStage;
+	
 	@Override
 	public void start(Stage primaryStage) {
-		
+		this.primaryStage = primaryStage;
 		primaryStage.setTitle("Statistics");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	public DisplayStatistics(List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, List<String> sublists, int currentLevel) {
+	public DisplayStatistics(Scene parent, List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, List<String> sublists, int currentLevel) {
 		super();
 		
 		this.wordlist = wordlist;
@@ -63,11 +68,23 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		controls.add(sublistSelectCombo, 0, 0);
 		controls.add(displayButton, 1, 0);
 		
-		GridPane root = new GridPane();
-		root.setPadding(new Insets(5));
-		root.setVgap(5);
-		root.add(controls, 0, 0);
-		root.add(displayArea, 0, 1);
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(5));
+		grid.setVgap(5);
+		grid.add(controls, 0, 0);
+		grid.add(displayArea, 0, 1);
+		grid.setAlignment(Pos.CENTER);
+		
+		Button back = new BackButton();
+		back.setOnAction(e -> primaryStage.setScene(parent));
+		
+		HBox hbox = new HBox(back);
+		hbox.setPadding(new Insets(5));
+		hbox.setAlignment(Pos.TOP_LEFT);
+		
+		BorderPane root = new BorderPane();
+		root.setTop(hbox);
+		root.setCenter(grid);
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 		
 		scene = new Scene(root);

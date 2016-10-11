@@ -8,11 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -28,8 +31,6 @@ public abstract class DisplayOptions extends Application implements EventHandler
 	private final ComboBox<String> listCombo;
 	private final ComboBox<String> sublistCombo;
 
-	private final Button submitButton;
-
 	private Scene scene;
 
 	private Stage primaryStage;
@@ -43,7 +44,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 	}
 
 
-	public DisplayOptions(String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
+	public DisplayOptions(Scene parent, String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
 		super();
 
 		List<String> voices = new ArrayList<>();
@@ -60,8 +61,6 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		Label listLabel = new Label("List:");
 		Label sublistLabel = new Label("Sub-list:");
 
-		submitButton = new Button("Submit");	
-
 		voiceCombo.getSelectionModel().select(currentSpeech);
 		listCombo.getSelectionModel().select(currentList);
 		sublistCombo.getSelectionModel().select(currentSubList);
@@ -69,22 +68,32 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		voiceCombo.setOnAction(this);
 		listCombo.setOnAction(this);
 		sublistCombo.setOnAction(this);
-		submitButton.setOnAction(this);
 
-		GridPane root = new GridPane();
-		root.setHgap(5);
-		root.setVgap(5);
-		root.setPadding(new Insets(5));
-		root.add(voiceLabel, 0, 0);
-		root.add(voiceCombo, 2, 0);
-		root.add(listLabel, 0, 1);
-		root.add(listCombo, 2, 1);
-		root.add(sublistLabel, 0, 2);
-		root.add(sublistCombo, 2, 2);
+		GridPane grid = new GridPane();
+		grid.setHgap(5);
+		grid.setVgap(5);
+		grid.setPadding(new Insets(5));
+		grid.add(voiceLabel, 0, 0);
+		grid.add(voiceCombo, 2, 0);
+		grid.add(listLabel, 0, 1);
+		grid.add(listCombo, 2, 1);
+		grid.add(sublistLabel, 0, 2);
+		grid.add(sublistCombo, 2, 2);
 		voiceCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		listCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		sublistCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		root.add(submitButton, 1, 3);
+		grid.setAlignment(Pos.CENTER);
+		
+		Button back = new BackButton();
+		back.setOnAction(e -> primaryStage.setScene(parent));
+		
+		HBox hbox = new HBox(back);
+		hbox.setPadding(new Insets(5));
+		hbox.setAlignment(Pos.TOP_LEFT);
+		
+		BorderPane root = new BorderPane();
+		root.setTop(hbox);
+		root.setCenter(grid);
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 
 		scene = new Scene(root);
@@ -106,10 +115,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 			changeList(listCombo.getSelectionModel().getSelectedItem(), sublistCombo);
 		} else if (e.getSource() == sublistCombo) {
 			changeSublist(sublistCombo.getSelectionModel().getSelectedItem());
-		} else if (e.getSource() == submitButton) {
-			primaryStage.hide();
 		}
-
 	}
 
 }
