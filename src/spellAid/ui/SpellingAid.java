@@ -225,7 +225,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			/*primaryStage.hide();
 			newQuiz.start(primaryStage);
 			primaryStage.centerOnScreen();*/
-			newQuiz.start(new Stage());
+			newQuiz.start(primaryStage);
 		} catch (Exception e) {}
 	}
 
@@ -236,7 +236,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private void displayStatistics() {
 		Application displayStatistics = new DisplayStatistics(wordlist,masteredList,failedList,sublists, sublists.indexOf(currentSubList));
 		try {
-			displayStatistics.start(new Stage());
+			displayStatistics.start(primaryStage);
 		} catch (Exception e) {}
 	}
 

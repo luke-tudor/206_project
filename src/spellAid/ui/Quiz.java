@@ -55,7 +55,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	private boolean hasChance;
 	private boolean[] testResults;
 	
-	private Scene root;
+	private Scene scene;
 	
 	private GraphicsFactory gFac;
 	
@@ -75,7 +75,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 		});
 		primaryStage.setTitle(windowName);
-		primaryStage.setScene(root);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
@@ -141,11 +141,12 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		//videoPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		//graphicsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 
-		BorderPane border = new BorderPane();
-		border.setRight(internalPanel);
-		border.setLeft(graphicsPanel);
+		BorderPane root = new BorderPane();
+		root.setRight(internalPanel);
+		root.setLeft(graphicsPanel);
+		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 		
-		root = new Scene(border);
+		scene = new Scene(root);
 
 		// Select text field
 		textField.requestFocus();

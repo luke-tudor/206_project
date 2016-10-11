@@ -30,13 +30,13 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 	private final List<List<String>> masteredList;
 	private final List<List<String>> failedList;
 	
-	private Scene root;
+	private Scene scene;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		
 		primaryStage.setTitle("Statistics");
-		primaryStage.setScene(root);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
@@ -63,13 +63,14 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		controls.add(sublistSelectCombo, 0, 0);
 		controls.add(displayButton, 1, 0);
 		
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(5));
-		grid.setVgap(5);
-		grid.add(controls, 0, 0);
-		grid.add(displayArea, 0, 1);
+		GridPane root = new GridPane();
+		root.setPadding(new Insets(5));
+		root.setVgap(5);
+		root.add(controls, 0, 0);
+		root.add(displayArea, 0, 1);
+		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 		
-		root = new Scene(grid);
+		scene = new Scene(root);
 	}
 
 	private void updateStatisticsDisplay(int levelToBeShown){
