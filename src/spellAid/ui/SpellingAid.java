@@ -245,7 +245,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
 		File listToAdd = fileChooser.showOpenDialog(primaryStage);
 		try {
-			Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()), FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
+			Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
+					FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
 		} catch (IOException | NullPointerException e) {}
 		WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
 	}
