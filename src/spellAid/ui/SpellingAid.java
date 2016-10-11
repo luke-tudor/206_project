@@ -26,6 +26,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import spellAid.util.IOHelper;
 import spellAid.util.UniqueRandomListMaker;
@@ -242,6 +243,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private void addList() {
 		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"));
 		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
 		File listToAdd = fileChooser.showOpenDialog(primaryStage);
 		try {
