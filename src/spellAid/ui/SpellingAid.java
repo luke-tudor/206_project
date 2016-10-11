@@ -82,6 +82,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private String currentSpeech;
 
 	private Stage primaryStage;
+	
+	private Scene scene;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -133,7 +135,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		root.setTop(flow);
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 
-		Scene scene = new Scene(root);
+		scene = new Scene(root);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
@@ -198,7 +200,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		 * functionality. Some methods are overridden so that words can be
 		 * written to the corresponding files.
 		 */
-		Application newQuiz = new Quiz("New Quiz", testList, speechScript) {
+		Application newQuiz = new Quiz(scene, "New Quiz", testList, speechScript) {
 
 			@Override
 			protected void passedFirstTime() {

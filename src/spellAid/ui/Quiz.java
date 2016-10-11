@@ -15,6 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import spellAid.ui.speaker.AsynchronousComponentEnabler;
@@ -61,8 +62,11 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	
 	private final String windowName;
 	
+	private Stage primaryStage;
+	
 	@Override
 	public void start(Stage primaryStage) {
+		this.primaryStage = primaryStage;
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
 
 			@Override
@@ -81,7 +85,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 	// This constructor takes two parameters, the name of the JFrame, and the
 	// list of words to be tested.
-	public Quiz(String frameName, String[] list, String scriptFile) {
+	public Quiz(Scene parent, String frameName, String[] list, String scriptFile) {
 		// Creates a JFrame and sets all the GUI fields.
 		super();
 		
@@ -141,9 +145,17 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		//videoPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		//graphicsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 
+		BackButton back = new BackButton();
+		back.setOnAction(e -> primaryStage.setScene(parent));
+		
+		HBox hbox = new HBox(back);
+		hbox.setPadding(new Insets(5));
+		hbox.setAlignment(Pos.TOP_LEFT);
+		
 		BorderPane root = new BorderPane();
 		root.setRight(internalPanel);
 		root.setLeft(graphicsPanel);
+		root.setTop(hbox);
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
 		
 		scene = new Scene(root);
@@ -151,7 +163,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		// Select text field
 		textField.requestFocus();
 		textField.selectAll();
-		
 	}
 
 	/*
