@@ -57,7 +57,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
 	
-	private static String STYLESHEET = new URLString("style/appstyle.css").getURL();
+	private static final String STYLESHEET = new URLString("style/appstyle.css").getURL();
 
 	/*
 	 * These fields refer to the buttons in the GUI.
