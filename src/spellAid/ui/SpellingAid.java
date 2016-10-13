@@ -2,7 +2,6 @@ package spellAid.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +29,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import spellAid.util.IOHelper;
+import spellAid.util.URLString;
 import spellAid.util.UniqueRandomListMaker;
 
 /**
@@ -57,7 +57,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
 	
-	private static String STYLESHEET;
+	private static String STYLESHEET = new URLString("style/appstyle.css").getURL();
 
 	/*
 	 * These fields refer to the buttons in the GUI.
@@ -87,12 +87,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private Stage primaryStage;
 	
 	private Scene scene;
-	
-	static {
-		try {
-			STYLESHEET = FileSystems.getDefault().getPath("style/appstyle.css").toUri().toURL().toString();
-		} catch (MalformedURLException e) {}
-	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

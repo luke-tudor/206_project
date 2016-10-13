@@ -1,9 +1,5 @@
 package spellAid.ui.video;
 
-import java.net.MalformedURLException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import spellAid.util.URLString;
 
 /**
  * This class creates and shows a video using VLC media player.
@@ -68,11 +65,7 @@ public class VideoPanel extends BorderPane {
 		BorderPane contentPanel = new BorderPane();
 		contentPanel.setPrefSize(600, 400);
 
-		Media video = null;
-		Path path = FileSystems.getDefault().getPath(videoPath);
-		try {
-			video = new Media(path.toUri().toURL().toString());
-		} catch (MalformedURLException e) {}
+		Media video = new Media(new URLString(videoPath).getURL());
 
 		player = new MediaPlayer(video);
 
