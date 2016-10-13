@@ -147,7 +147,7 @@ public abstract class Quiz extends Application {
 		BorderPane root = new BorderPane();
 		root.setCenter(internalPanel);
 		root.setTop(hbox);
-		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
+		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
 
 		scene = new Scene(root);
 
@@ -257,7 +257,7 @@ public abstract class Quiz extends Application {
 
 			// if yes, then play it
 			if (reply.get() == yes) {
-				VideoEditor ve = new VideoEditor();
+				VideoEditor ve = new VideoEditor(scene);
 				try {
 					ve.start(new Stage());
 				} catch (Exception e) {}

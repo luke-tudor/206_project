@@ -1,6 +1,22 @@
 package spellAid.ui;
 
-public class AppDim {
-	public static int HEIGHT = 650;
-	public static int WIDTH = 900;
+/**
+ * This enum simply defines the dimensions of the application
+ * 
+ * @author Luke Tudor
+ */
+public enum AppDim {
+	
+	WIDTH(650),
+	HEIGHT(900);
+	
+	private int value;
+	
+	private AppDim(int value) {
+		this.value = value;
+	}
+	
+	public int getValue() {
+		return value;
+	}
 }

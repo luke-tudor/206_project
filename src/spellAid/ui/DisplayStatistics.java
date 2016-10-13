@@ -85,7 +85,7 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
 		root.setCenter(grid);
-		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
+		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
 		
 		scene = new Scene(root);
 	}

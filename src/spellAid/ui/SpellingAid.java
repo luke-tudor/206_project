@@ -137,7 +137,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		root.setPadding(new Insets(5));
 		root.setCenter(grid);
 		root.setTop(flow);
-		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
+		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
 
 		scene = new Scene(root);
 		scene.getStylesheets().add(STYLESHEET);
