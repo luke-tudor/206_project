@@ -18,7 +18,7 @@ public class TestVideo extends Application {
 
 			@Override
 			public void handle(WindowEvent event) {
-				video.release();
+				video.stop();
 				primaryStage.hide();
 			}
 			

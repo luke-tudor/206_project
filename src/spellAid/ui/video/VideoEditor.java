@@ -20,7 +20,19 @@ public class VideoEditor extends Application {
 		
 		VideoPanel vp = new VideoPanel();
 		
-		VideoManipulator vm = new VideoManipulator();
+		VideoManipulator vm = new VideoManipulator() {
+			
+			@Override
+			void doWhenStarting() {
+				vp.stop();
+			}
+			
+			@Override
+			void doWhenFinished() {
+				vp.setVideo("videos/out.mp4");
+				vp.start();
+			}
+		};
 		
 		BorderPane root = new BorderPane();
 		root.setTop(vp);

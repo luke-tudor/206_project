@@ -23,8 +23,10 @@ import javafx.scene.media.MediaView;
  *
  */
 public class VideoPanel extends BorderPane {
+	
+	private static String BUNNYPATH = "videos/big_buck_bunny_1_minute.mp4";
 
-	private final MediaPlayer player;
+	private MediaPlayer player;
 
 	private final ButtonPanel btnPanel;
 
@@ -37,8 +39,37 @@ public class VideoPanel extends BorderPane {
 		BorderPane contentPanel = new BorderPane();
 		contentPanel.setPrefSize(600, 400);
 
+		setVideo(BUNNYPATH);
+		
+		// Create and configure a panel for the buttons
+		btnPanel = new ButtonPanel();
+		btnPanel.setStyle("-fx-background-color: lightgrey;");
+		for (Node n : btnPanel.getChildren())
+			n.setDisable(true);
+
+		setBottom(btnPanel);
+	}
+
+	public void start() {
+		for (Node n : btnPanel.getChildren())
+			n.setDisable(false);
+
+		player.play();
+	}
+
+	public void stop() {
+		for (Node n : btnPanel.getChildren())
+			n.setDisable(true);
+		
+		player.dispose();
+	}
+	
+	public void setVideo(String videoPath) {
+		BorderPane contentPanel = new BorderPane();
+		contentPanel.setPrefSize(600, 400);
+
 		Media video = null;
-		Path path = FileSystems.getDefault().getPath("videos/big_buck_bunny_1_minute.mp4");
+		Path path = FileSystems.getDefault().getPath(videoPath);
 		try {
 			video = new Media(path.toUri().toURL().toString());
 		} catch (MalformedURLException e) {}
@@ -52,31 +83,13 @@ public class VideoPanel extends BorderPane {
 		contentPanel.setCenter(mediaView);
 
 		contentPanel.setStyle("-fx-background-color: lightgrey;");
-		
-		// Create and configure a panel for the buttons
-		btnPanel = new ButtonPanel();
-		btnPanel.setStyle("-fx-background-color: lightgrey;");
-		for (Node n : btnPanel.getChildren())
-			n.setDisable(true);
-
 		setCenter(contentPanel);
-		setBottom(btnPanel);
-	}
-
-	public void start() {
-		for (Node n : btnPanel.getChildren())
-			n.setDisable(false);
-
-		player.play();
-	}
-
-	public void release() {
-		player.dispose();
 	}
 
 	private class ButtonPanel extends FlowPane implements EventHandler<ActionEvent> {
 
 		private static final String MUTEXT = "Mute";
+		private static final String UMTEXT = "Unmute";
 		private static final String PATEXT = "Pause";
 		private static final String PLTEXT = "Play";
 		private static final String STTEXT = "Stop";
@@ -113,10 +126,13 @@ public class VideoPanel extends BorderPane {
 					play.setText(PLTEXT);
 				}
 			} else if (e.getSource() == mute){
-				if (player.isMute())
+				if (player.isMute()) {
+					mute.setText(MUTEXT);
 					player.setMute(false);
-				else 
+				} else { 
+					mute.setText(UMTEXT);
 					player.setMute(true);
+				}
 			} else {
 				player.stop();
 				play.setText(PLTEXT);

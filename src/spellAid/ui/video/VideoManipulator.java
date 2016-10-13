@@ -85,13 +85,20 @@ public class VideoManipulator extends VBox {
 
 		worker.setDaemon(true);
 
+		doWhenStarting();
+		
 		worker.start();
 	}
 
 	private void asynchronousFinish() {
 		submit.setDisable(false);
 		processFinished = true;
+		doWhenFinished();
 	}
+	
+	void doWhenStarting() {}
+	
+	void doWhenFinished() {}
 	
 	private void updateProgress() {
 		if (processFinished) {
