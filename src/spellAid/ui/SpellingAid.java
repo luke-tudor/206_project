@@ -211,7 +211,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		 * functionality. Some methods are overridden so that words can be
 		 * written to the corresponding files.
 		 */
-		Application newQuiz = new Quiz(scene, "New Quiz", testList, speechScript) {
+		Application newQuiz = new Quiz(scene, testList, speechScript) {
 
 			@Override
 			protected void passedFirstTime() {
@@ -230,9 +230,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void failedSecondTime() {
 				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
-
-			@Override
-			protected void passedQuiz() {}
 
 		};
 		try {

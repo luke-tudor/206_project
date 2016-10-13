@@ -21,7 +21,7 @@ import javafx.stage.WindowEvent;
 import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
 import spellAid.ui.speaker.Speaker;
-import spellAid.ui.video.VideoPanel;
+import spellAid.ui.video.VideoEditor;
 
 /**
  * This class creates and runs the testing frame that the user sees when the 
@@ -43,7 +43,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	// These fields are the GUI components used to display the test.
 	private GraphicsPanel graphicsPanel;
 	private FlowPane quizPanel;
-	private VideoPanel videoPane;
 	private Button repeatButton;
 	private Button testButton;
 	private TextField textField;
@@ -60,8 +59,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	
 	private GraphicsFactory gFac;
 	
-	private final String windowName;
-	
 	private Stage primaryStage;
 	
 	@Override
@@ -73,29 +70,25 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 			public void handle(WindowEvent e){
 				// stop speaking when window is closed
 				speaker.sock();
-				videoPane.release();
 				primaryStage.hide();
 			}
 
 		});
-		primaryStage.setTitle(windowName);
+		primaryStage.setTitle("New Quiz");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
 	// This constructor takes two parameters, the name of the JFrame, and the
 	// list of words to be tested.
-	public Quiz(Scene parent, String frameName, String[] list, String scriptFile) {
+	public Quiz(Scene parent, String[] list, String scriptFile) {
 		// Creates a JFrame and sets all the GUI fields.
 		super();
-		
-		windowName = frameName;
 		
 		gFac = new GraphicsFactory();
 		
 		graphicsPanel = new GraphicsPanel(list.length);
 
-		videoPane = new VideoPanel();
 		repeatButton = new Button(REPEAT);
 		testButton = new Button(BEGIN);
 		textField = new TextField("Enter text here");
@@ -138,7 +131,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		
 		// Layout panels
 		BorderPane internalPanel = new BorderPane();
-		internalPanel.setTop(videoPane);
+		//internalPanel.setTop(videoPane);
 		internalPanel.setBottom(quizPanel);
 
 		// Add borders to panels
@@ -146,7 +139,7 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		//graphicsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 
 		BackButton back = new BackButton();
-		back.setOnAction(e -> primaryStage.setScene(parent));
+		back.setOnAction(e -> {primaryStage.setScene(parent); speaker.sock();});
 		
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
@@ -241,8 +234,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	
 	protected abstract void failedSecondTime();
 	
-	protected abstract void passedQuiz();
-	
 	/*
 	 * Invoked when the quiz is complete
 	 */
@@ -257,7 +248,6 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		}
 
 		if (numCorrect > 8) {
-			passedQuiz();
 			
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			
@@ -276,7 +266,10 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 			
 			// if yes, then play it
 			if (reply.get() == yes) {
-				videoPane.start();
+				VideoEditor ve = new VideoEditor();
+				try {
+					ve.start(new Stage());
+				} catch (Exception e) {}
 			}
 
 		} else {

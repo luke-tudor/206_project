@@ -127,6 +127,7 @@ public class VideoManipulator extends VBox {
 			add(progressBar, 1, 0);
 			add(negate, 1, 1);
 			add(fps, 1, 2);
+			setAlignment(Pos.CENTER);
 		}
 
 		private String getSettings() {
