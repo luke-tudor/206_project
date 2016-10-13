@@ -49,8 +49,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * to refer to the necessary text files. This is done so that the actual
 	 * name of the files is only found in one place, here.
 	 */
-	private static Path WORDLIST = 
-			FileSystems.getDefault().getPath("user_lists/NZCER-spelling-lists.txt");
+
 
 	private static String[] WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
 
@@ -79,6 +78,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private List<List<String>> failedList;
 
 	private String currentSubList;
+	
+	private String currentWordList;  
+
 
 	//currentSpeech is just the text on the combobox of the current voice
 	private String speechScript;
@@ -95,6 +97,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		ioHelper = new ExtendedIOHelper();
 
+		currentWordList = "user_lists/NZCER-spelling-lists.txt";
+		
 		createWordList();
 		createStatsLists();
 
@@ -209,9 +213,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void passedFirstTime() {
-				String listName = WORDLIST.getFileName().toString();
-				ioHelper.addLineToFile(getLastTestedWord(), "user_lists/" 
-				+ listName.substring(0, listName.length() - 4) 
+				ioHelper.addLineToFile(getLastTestedWord(),
+				currentWordList.substring(0, currentWordList.length() - 4) 
 				+ "." + currentSubList + ".mastered.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
@@ -263,7 +266,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private void displayOptionsWindow() {
 		Application displayOptions =
-				new DisplayOptions(scene, WORDLISTS, WORDLIST.toFile().getName(), sublists, currentSubList, currentSpeech) {
+				new DisplayOptions(scene, WORDLISTS, currentWordList, sublists, currentSubList, currentSpeech) {
 
 			@Override
 			protected void changeSpeech(String voice) {
@@ -283,7 +286,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void changeList(String list, ComboBox<String> sublistCombo) {
-				WORDLIST = FileSystems.getDefault().getPath("user_lists/" + list);
+				currentWordList = "user_lists/" + list;
 				createWordList();
 				createStatsLists();
 				sublistCombo.setItems(FXCollections.observableList(sublists));
@@ -298,7 +301,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	}
 
 	private void createWordList() {
-		List<String> unfilteredList = ioHelper.readAllLines(WORDLIST);
+		List<String> unfilteredList = ioHelper.readAllLines(currentWordList);
 		wordlist = new ArrayList<Set<String>>();
 		sublists = new ArrayList<String>();
 
