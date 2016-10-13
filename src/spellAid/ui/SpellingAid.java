@@ -28,7 +28,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import spellAid.util.IOHelper;
+import spellAid.util.ExtendedIOHelper;
 import spellAid.util.URLString;
 import spellAid.util.UniqueRandomListMaker;
 
@@ -71,7 +71,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * This field is a helper object to easily deal with file IO by removing the
 	 * need for this object to worry about file  and IO Exceptions. 
 	 */
-	private IOHelper ioHelper;
+	private ExtendedIOHelper ioHelper;
 
 	private List<Set<String>> wordlist;
 	private List<String> sublists;
@@ -93,7 +93,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		this.primaryStage = primaryStage;
 
-		ioHelper = new IOHelper();
+		ioHelper = new ExtendedIOHelper();
 
 		createWordList();
 		createStatsLists();
