@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import spellAid.ui.AppDim;
 
 public class VideoEditor extends Application {
 	
@@ -37,6 +38,7 @@ public class VideoEditor extends Application {
 		BorderPane root = new BorderPane();
 		root.setTop(vp);
 		root.setBottom(vm);
+		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);;
 		
 		scene = new Scene(root);
 	}

@@ -16,45 +16,46 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class VideoManipulator extends VBox {
 
 	private Button submit;
-	
+
 	private ProgressBar progressBar;
 
 	private ControlPanel cPanel;
-	
+
 	private double originalFileSize;
-	
+
 	private File newFile;
-	
+
 	private boolean processFinished;
 
 	public VideoManipulator() {
 		super();
 
-		submit = new Button("Submit");
+		submit = new Button("Make Video");
 		submit.setOnAction(e -> createVideo());
 
 		progressBar = new ProgressBar(0);
-		
+
 		cPanel = new ControlPanel();
-		
+
 		originalFileSize = FileSystems.getDefault().getPath("videos/big_buck_bunny_1_minute.mp4").toFile().length();
-		
+
 		newFile = FileSystems.getDefault().getPath("videos/out.mp4").toFile();
-		
+
 		processFinished = true;
-		
+
 		getChildren().add(cPanel);
 		getChildren().add(submit);
 		setAlignment(Pos.CENTER);
 
 		setPadding(new Insets(5));
-		
+
 		Timeline timer = new Timeline(new KeyFrame(Duration.millis(200), e -> updateProgress()));
 		timer.setCycleCount(Animation.INDEFINITE);
 		timer.play();
@@ -63,7 +64,7 @@ public class VideoManipulator extends VBox {
 	private void createVideo() {
 
 		submit.setDisable(true);
-		
+
 		processFinished = false;
 
 		Thread worker = new Thread(new Runnable() {
@@ -86,7 +87,7 @@ public class VideoManipulator extends VBox {
 		worker.setDaemon(true);
 
 		doWhenStarting();
-		
+
 		worker.start();
 	}
 
@@ -95,11 +96,11 @@ public class VideoManipulator extends VBox {
 		processFinished = true;
 		doWhenFinished();
 	}
-	
+
 	void doWhenStarting() {}
-	
+
 	void doWhenFinished() {}
-	
+
 	private void updateProgress() {
 		if (processFinished) {
 			progressBar.setProgress(1);
@@ -108,13 +109,15 @@ public class VideoManipulator extends VBox {
 		}
 	}
 
-	private class ControlPanel extends GridPane {
-		
+	private class ControlPanel extends VBox {
+
 		private Label[] labels;
 
 		private RadioButton negate;
 
 		private Slider fps;
+
+		private Slider[] sliders;
 
 		private ControlPanel() {
 			labels = new Label[]{new Label("Rendering Progress:"), new Label("Invert Colour:"),
@@ -123,27 +126,48 @@ public class VideoManipulator extends VBox {
 			fps = new Slider(1, 24, 24);
 			fps.setShowTickLabels(true);
 
-			setVgap(5);
-			setHgap(5);
+			GridPane grid = new GridPane();
+			grid.setVgap(5);
+			grid.setHgap(5);
+			grid.setAlignment(Pos.CENTER);
 			setPadding(new Insets(5));
-			
+
 			for (int i = 0; i < labels.length; i++){
-				add(labels[i], 0, i);
+				grid.add(labels[i], 0, i);
 			}
 
-			add(progressBar, 1, 0);
-			add(negate, 1, 1);
-			add(fps, 1, 2);
+			HBox eq = new HBox(new Label("Change contrast, brightness and saturation:"));
+			eq.setAlignment(Pos.CENTER);
+			
+			sliders = new Slider[3];
+			sliders[0] = new Slider(-2, 2, 1);
+			sliders[1] = new Slider(-1, 1, 0);
+			sliders[2] = new Slider(0, 3, 1);
+
+			for (Slider s : sliders) {
+				eq.getChildren().add(s);
+				s.setShowTickLabels(true);
+			}
+
+			grid.add(progressBar, 1, 0);
+			grid.add(negate, 1, 1);
+			grid.add(fps, 1, 2);
+			
+			getChildren().add(grid);
+			getChildren().add(eq);
 			setAlignment(Pos.CENTER);
 		}
 
 		private String getSettings() {
 			StringBuilder sb = new StringBuilder();
+			sb.append(" -vf eq=contrast=" + sliders[0].getValue() 
+					+ ":brightness=" + sliders[1].getValue() 
+					+ ":saturation=" + sliders[2].getValue());
 			if (negate.isSelected()) {
-				//sb.append(",negate");
 				sb.append(" -vf negate");
 			}
 			sb.append(" -r " + fps.getValue());
+			System.out.println(sb.toString());
 			return sb.toString();
 		}
 	}
