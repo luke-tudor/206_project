@@ -1,5 +1,6 @@
 package spellAid.ui;
 
+import java.awt.event.KeyEvent;
 import java.util.Optional;
 
 import javafx.application.Application;
@@ -13,11 +14,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
 import spellAid.ui.speaker.Speaker;
@@ -33,7 +35,7 @@ import spellAid.ui.video.VideoEditor;
  * 
  * @author Luke Tudor and Aprajit Gandhi
  */
-public abstract class Quiz extends Application implements EventHandler<ActionEvent> {
+public abstract class Quiz extends Application {
 
 	// These fields represent the different states for the JButton.
 	private static final String ENTER = "Enter";
@@ -42,10 +44,11 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 	// These fields are the GUI components used to display the test.
 	private GraphicsPanel graphicsPanel;
-	private FlowPane quizPanel;
+	private HBox quizPanel;
 	private Button repeatButton;
 	private Button testButton;
 	private TextField textField;
+	private ScorePanel scorePanel;
 
 	// These fields are used to run the test.
 	private Speaker speaker;
@@ -54,26 +57,16 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	private int currentTestNum;
 	private boolean hasChance;
 	private boolean[] testResults;
-	
+
 	private Scene scene;
-	
+
 	private GraphicsFactory gFac;
-	
+
 	private Stage primaryStage;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
-
-			@Override
-			public void handle(WindowEvent e){
-				// stop speaking when window is closed
-				speaker.sock();
-				primaryStage.hide();
-			}
-
-		});
 		primaryStage.setTitle("New Quiz");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -84,15 +77,16 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	public Quiz(Scene parent, String[] list, String scriptFile) {
 		// Creates a JFrame and sets all the GUI fields.
 		super();
-		
+
 		gFac = new GraphicsFactory();
-		
+
 		graphicsPanel = new GraphicsPanel(list.length);
 
 		repeatButton = new Button(REPEAT);
 		testButton = new Button(BEGIN);
 		textField = new TextField("Enter text here");
 		//textField = new TextField("Enter text here", 20);
+		scorePanel = new ScorePanel(list.length);
 
 		// creates a list of components that are disabled asynchronously
 		enabledList = new AsynchronousComponentEnabler(new Node[]{
@@ -116,23 +110,33 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		hasChance = true;
 		testResults = new boolean[list.length];
 
-		repeatButton.setOnAction(this);
+		repeatButton.setOnAction(e -> repeatPressed());
 		repeatButton.setDisable(true);
 
-		testButton.setOnAction(this);
+		testButton.setOnAction(e -> wordEntered());
 		// Configure the button to be a constant size.
 		testButton.setPrefWidth(150);
+		
+		textField.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.ENTER && !testButton.isDisabled()){
+				wordEntered();
+			}
+		});
 
 		// Layout the panel which does the testing
-		quizPanel = new FlowPane(new Node[]{textField, repeatButton, testButton});
+		quizPanel = new HBox(new Node[]{textField, repeatButton, testButton});
 		quizPanel.setAlignment(Pos.CENTER);
 		quizPanel.setPadding(new Insets(5));
-		quizPanel.setHgap(5);
-		
+		quizPanel.setSpacing(5);
+
 		// Layout panels
 		BorderPane internalPanel = new BorderPane();
-		//internalPanel.setTop(videoPane);
+		internalPanel.setCenter(scorePanel);
 		internalPanel.setBottom(quizPanel);
+		internalPanel.setLeft(graphicsPanel);
+		scorePanel.setAlignment(Pos.CENTER);
+		quizPanel.setAlignment(Pos.CENTER);
+		graphicsPanel.setAlignment(Pos.CENTER);
 
 		// Add borders to panels
 		//videoPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -140,83 +144,75 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 		BackButton back = new BackButton();
 		back.setOnAction(e -> {primaryStage.setScene(parent); speaker.sock();});
-		
+
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
-		
+
 		BorderPane root = new BorderPane();
-		root.setRight(internalPanel);
-		root.setLeft(graphicsPanel);
+		root.setCenter(internalPanel);
 		root.setTop(hbox);
 		root.setPrefSize(AppDim.WIDTH, AppDim.HEIGHT);
-		
+
 		scene = new Scene(root);
 
 		// Select text field
 		textField.requestFocus();
 		textField.selectAll();
+
+		scorePanel.startTimer();
 	}
 
-	/*
-	 * This method runs every time the button is pressed.
-	 */
-	@Override
-	public final void handle(ActionEvent e) {
+	private void wordEntered() {
+		if (testButton.getText().equals(ENTER)) {
 
-		if (e.getSource() == testButton){
-			/*
-			 * If the button is prompting the user to enter text, this object tests
-			 * the word in the JTextField by calling a helper method
-			 * isSpelledCorrectly(). There is different behavior if the user failed
-			 * the same word previously hence the "hasChance" field.
-			 */
-			if (testButton.getText().equals(ENTER)) {
+			if (hasChance){
 
-				if (hasChance){
-
-					if (isSpelledCorrectly()){
-						firstTimePass();
-					} else {
-						firstTimeFailure();
-					}
-
+				if (isSpelledCorrectly()){
+					firstTimePass();
 				} else {
-
-					if (isSpelledCorrectly()){
-						secondTimePass();
-					} else {
-						secondTimeFailure();
-					}
-
+					firstTimeFailure();
 				}
 
-				textField.requestFocus();
-				textField.selectAll();
-
-				// If we have run out of words to test, the button is disabled.
-				if (currentTestNum == testList.length){
-					enabledList.disableAllComponents();
-					enabledList.setShouldComponentBeEnabled(repeatButton, false);
-					enabledList.setShouldComponentBeEnabled(testButton, false);
-				}
-
-				/*
-				 * If the button is not prompting the user to enter text, the button
-				 * speaks the word that is to be tested next, and then changes the
-				 * button so that the user is now prompted to enter the answer.
-				 */
 			} else {
-				testButton.setText(ENTER);
-				enabledList.setShouldComponentBeEnabled(repeatButton, true);
-				speaker.speak(testList[currentTestNum]);
+
+				if (isSpelledCorrectly()){
+					secondTimePass();
+				} else {
+					secondTimeFailure();
+				}
+
 			}
+
+			textField.requestFocus();
+			textField.selectAll();
+
+			// If we have run out of words to test, the button is disabled.
+			if (currentTestNum == testList.length){
+				enabledList.disableAllComponents();
+				enabledList.setShouldComponentBeEnabled(repeatButton, false);
+				enabledList.setShouldComponentBeEnabled(testButton, false);
+			}
+
+			/*
+			 * If the button is not prompting the user to enter text, the button
+			 * speaks the word that is to be tested next, and then changes the
+			 * button so that the user is now prompted to enter the answer.
+			 */
 		} else {
-			repeatButton.setDisable(true);
-			enabledList.setShouldComponentBeEnabled(repeatButton, false);
-			speaker.speak(testList[currentTestNum] + "... " +
-					testList[currentTestNum]);
+			testButton.setText(ENTER);
+			enabledList.setShouldComponentBeEnabled(repeatButton, true);
+			speaker.speak(testList[currentTestNum]);
+			textField.requestFocus();
+			textField.selectAll();
 		}
+	}
+	
+	private void repeatPressed() {
+		repeatButton.setDisable(true);
+		enabledList.setShouldComponentBeEnabled(repeatButton, true);
+		speaker.speak(testList[currentTestNum] + "... " +
+				testList[currentTestNum]);
 	}
 
 	/*
@@ -225,15 +221,15 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 	protected String getLastTestedWord() {
 		return testList[currentTestNum];
 	}
-	
+
 	protected abstract void passedFirstTime();
-	
+
 	protected abstract void failedFirstTime();
-	
+
 	protected abstract void passedSecondTime();
-	
+
 	protected abstract void failedSecondTime();
-	
+
 	/*
 	 * Invoked when the quiz is complete
 	 */
@@ -248,22 +244,22 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 		}
 
 		if (numCorrect > 8) {
-			
+
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			
+
 			ButtonType yes = new ButtonType("Yes");
 			ButtonType no = new ButtonType("No");
-			
+
 			alert.getButtonTypes().setAll(yes, no);
 			alert.setTitle("Test Results");
 			alert.setContentText("Well done!"
 					+ " You got " + numCorrect + " out of " 
 					+ testResults.length + ".\nWould you like to see a "
 					+ "video?");
-			
+
 			// Asks if user wants a video
 			Optional<ButtonType> reply = alert.showAndWait();
-			
+
 			// if yes, then play it
 			if (reply.get() == yes) {
 				VideoEditor ve = new VideoEditor();
@@ -274,13 +270,13 @@ public abstract class Quiz extends Application implements EventHandler<ActionEve
 
 		} else {
 			// tells user how many they got correct
-			
+
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			
+
 			alert.setTitle("Test Results");
 			alert.setContentText("Too bad, you only got "
 					+ numCorrect + " out of " + testResults.length + ".");
-			
+
 			alert.showAndWait();
 		}
 

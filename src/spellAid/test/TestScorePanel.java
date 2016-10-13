@@ -14,7 +14,7 @@ public class TestScorePanel extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		ScorePanel sp = new ScorePanel();
+		ScorePanel sp = new ScorePanel(10);
 		
 		Scene scene = new Scene(sp);
 		primaryStage.setScene(scene);

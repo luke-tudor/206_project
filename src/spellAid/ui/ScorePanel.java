@@ -1,6 +1,7 @@
 package spellAid.ui;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
@@ -14,7 +15,7 @@ public class ScorePanel extends GridPane {
 	
 	private Label numLeft;
 
-	public ScorePanel() {
+	public ScorePanel(int numWords) {
 		super();
 		
 		labels = new Label[]{new Label("Number of words correct:"),
@@ -24,7 +25,7 @@ public class ScorePanel extends GridPane {
 		
 		stopwatch = new Stopwatch();
 		
-		numLeft = new Label("10");
+		numLeft = new Label(numWords + "");
 		
 		for (int i = 0; i < labels.length; i++) {
 			add(labels[i], 0, i);
@@ -37,6 +38,7 @@ public class ScorePanel extends GridPane {
 		setHgap(5);
 		setVgap(5);
 		setPadding(new Insets(5));
+		setAlignment(Pos.CENTER);
 	}
 	
 	public void startTimer() {
