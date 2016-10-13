@@ -4,7 +4,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.List;
 
-public class ExtendedIOHelper extends IOHelper{
+/**
+ * Class extension to allow for easy file manipulation with strings instead
+ * of paths.
+ * 
+ * @author Luke Tudor
+ */
+public class ExtendedIOHelper extends IOHelper {
 
 	public void addLineToFile(String line, String path) {
 		super.addLineToFile(line, string2path(path));

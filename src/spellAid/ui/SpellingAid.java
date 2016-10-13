@@ -209,6 +209,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void passedFirstTime() {
+				String listName = WORDLIST.getFileName().toString();
+				ioHelper.addLineToFile(getLastTestedWord(), "user_lists/" 
+				+ listName.substring(0, listName.length() - 4) 
+				+ "." + currentSubList + ".mastered.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
