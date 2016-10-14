@@ -1,5 +1,6 @@
 package spellAid.ui;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -7,13 +8,12 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -28,7 +28,7 @@ import spellAid.util.ExtendedIOHelper;
  * @author Aprajit Gandhi and Luke Tudor
  *
  */
-public class DisplayStatistics extends Application implements EventHandler<ActionEvent> {
+public class DisplayStatistics extends Application {
 
 	private final ComboBox<String> sublistSelectCombo;
 	private final Button displayButton;
@@ -68,8 +68,12 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		displayButton = new Button("Display Statistics");
 		table = new TableView<>();
 
-		sublistSelectCombo.setOnAction(this);
-		displayButton.setOnAction(this);
+		//sublistSelectCombo.setOnAction(this);
+		displayButton.setOnAction(e -> {
+			if(e.getSource() == displayButton){
+				updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
+			}
+		});
 
 		sublistSelectCombo.getSelectionModel().select(currentLevel);
 		updateStatisticsDisplay(currentLevel);
@@ -95,7 +99,8 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		failedCol.setMinWidth(100);
 		failedCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesFailed"));
 		
-		table.getColumns().addAll(new TableColumn[] {wordNameCol, masteredCol, faultedCol, failedCol});
+		table.setPlaceholder(new Label("No statistics to display"));
+		table.getColumns().addAll(Arrays.asList(wordNameCol, masteredCol, faultedCol, failedCol));
 		
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5));
@@ -162,13 +167,6 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 			}
 		}
 		table.setItems(data);
-	}
-
-	@Override
-	public void handle(ActionEvent e) {
-		if(e.getSource() == displayButton){
-			updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
-		}
 	}
 	
 	public static class Row {
