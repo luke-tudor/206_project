@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,11 +14,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import spellAid.util.ExtendedIOHelper;
 /**
  * 
  * Displays the statistics window and allows users to select what statistics level they wish to view
@@ -27,16 +32,21 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 
 	private final ComboBox<String> sublistSelectCombo;
 	private final Button displayButton;
-	private final Label displayArea;
+	
+	private TableView<Row> table;
 
-	private final List<Set<String>> wordlist;
-	private final List<List<String>> masteredList;
-	private final List<List<String>> failedList;
-	
 	private Scene scene;
-	
+
 	private Stage primaryStage;
+
+	private List<Set<String>> wordlist;
+
+	private ExtendedIOHelper ioHelper;
+
+	private String currentList;
 	
+	private ObservableList<Row> data;
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -45,48 +55,67 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		primaryStage.show();
 	}
 
-	public DisplayStatistics(Scene parent, List<Set<String>> wordlist,List<List<String>> masteredList, List<List<String>> failedList, List<String> sublists, int currentLevel) {
+	public DisplayStatistics(Scene parent, List<Set<String>> wordlist, List<String> sublists, String currentList, int currentLevel) {
 		super();
-		
+
 		this.wordlist = wordlist;
-		this.masteredList = masteredList;
-		this.failedList = failedList;
-		
+		this.currentList = currentList;
+
+		ioHelper = new ExtendedIOHelper();
+
 		sublistSelectCombo = new ComboBox<>(FXCollections.observableList(sublists));
 
 		displayButton = new Button("Display Statistics");
-		displayArea = new Label();
-		
+		table = new TableView<>();
+
 		sublistSelectCombo.setOnAction(this);
 		displayButton.setOnAction(this);
-		
-		updateStatisticsDisplay(currentLevel);
+
 		sublistSelectCombo.getSelectionModel().select(currentLevel);
-		
+		updateStatisticsDisplay(currentLevel);
+
 		GridPane controls = new GridPane();
 		controls.setHgap(5);
 		controls.add(sublistSelectCombo, 0, 0);
 		controls.add(displayButton, 1, 0);
 		
+		TableColumn<Row, String> wordNameCol = new TableColumn<>("Word");
+		wordNameCol.setMinWidth(100);
+		wordNameCol.setCellValueFactory(new PropertyValueFactory<Row, String>("word"));
+		
+		TableColumn<Row, String> masteredCol = new TableColumn<>("Mastered");
+		masteredCol.setMinWidth(100);
+		masteredCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesMastered"));
+		
+		TableColumn<Row, String> faultedCol = new TableColumn<>("Faulted");
+		faultedCol.setMinWidth(100);
+		faultedCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesFaulted"));
+		
+		TableColumn<Row, String> failedCol = new TableColumn<>("Failed");
+		failedCol.setMinWidth(100);
+		failedCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesFailed"));
+		
+		table.getColumns().addAll(new TableColumn[] {wordNameCol, masteredCol, faultedCol, failedCol});
+		
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(5));
 		grid.setVgap(5);
 		grid.add(controls, 0, 0);
-		grid.add(displayArea, 0, 1);
+		grid.add(table, 0, 1);
 		grid.setAlignment(Pos.CENTER);
-		
+
 		Button back = new BackButton();
 		back.setOnAction(e -> primaryStage.setScene(parent));
-		
+
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
-		
+
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
 		root.setCenter(grid);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
-		
+
 		scene = new Scene(root);
 	}
 
@@ -106,47 +135,33 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 				return numWords;
 			}
 		}
+
+		List<String> masteredList = ioHelper.readAllLines(currentList.substring(0, currentList.length() - 4) + "." 
+				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".mastered.txt");
+		List<String> faultedList = ioHelper.readAllLines(currentList + "." 
+				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".faulted.txt");
+		List<String> failedList = ioHelper.readAllLines(currentList + "." 
+				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".failed.txt");
 		
-		/*
-		 * If there are no statistics (all the files are empty or don't exist), 
-		 * the program simply tells the user with a message.
-		 */
-		if (masteredList.get(levelToBeShown).isEmpty() 
-				&& failedList.get(levelToBeShown).isEmpty()) {
-			displayArea.setText("No Statistics to Display");
-			
-			return;
-		}
-		/*
-		 * This creates a string which contains all the statistics for each word
-		 * in the word list.
-		 */
-		StringBuilder statsList = new StringBuilder();
+		data = FXCollections.observableArrayList();
 
 		WordCounter wordCounter = new WordCounter();	
 
 		for (String word : wordlist.get(levelToBeShown)){
 
-			int numMastered = wordCounter.wordCount(word,
-					masteredList.get(levelToBeShown));
-			int numFailed = wordCounter.wordCount(word,
-					failedList.get(levelToBeShown));
+			int numMastered = wordCounter.wordCount(word, masteredList);
+			int numFaulted = wordCounter.wordCount(word, faultedList);
+			int numFailed = wordCounter.wordCount(word, failedList);
 
 			/*
 			 * Only attempted words are added to the statistics, hence the if
 			 * statement that evaluates as false if a word has never been tested.
 			 */
-			if (numMastered != 0 || numFailed != 0){
-				// Format the string to something easy to read for a human.
-				statsList.append(
-						String.format(
-								"%20s: mastered(%d) failed(%d)\n",
-								word, numMastered, numFailed));
+			if (numMastered != 0 || numFaulted != 0 || numFailed != 0){
+				data.add(new Row(word, numMastered, numFaulted, numFailed));
 			}
 		}
-
-		displayArea.setText(statsList.toString());
-
+		table.setItems(data);
 	}
 
 	@Override
@@ -154,5 +169,51 @@ public class DisplayStatistics extends Application implements EventHandler<Actio
 		if(e.getSource() == displayButton){
 			updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
 		}
+	}
+	
+	public static class Row {
+		private SimpleStringProperty word;
+		private SimpleStringProperty timesMastered;
+		private SimpleStringProperty timesFaulted;
+		private SimpleStringProperty timesFailed;
+		
+		public Row(String word, int timesMastered, int timesFaulted, int timesFailed) {
+			this.word = new SimpleStringProperty(word);
+			this.timesMastered = new SimpleStringProperty(timesMastered + "");
+			this.timesFaulted = new SimpleStringProperty(timesFaulted + "");
+			this.timesFailed = new SimpleStringProperty(timesFailed + "");
+		}
+
+		public String getWord() {
+			return word.get();
+		}
+
+		public void setWord(String word) {
+			this.word.set(word);
+		}
+		
+		public String getTimesMastered() {
+			return timesMastered.get();
+		}
+
+		public void setTimesMastered(String timesMastered) {
+			this.timesMastered.set(timesMastered);
+		}
+		
+		public String getTimesFaulted() {
+			return timesFaulted.get();
+		}
+		
+		public void setTimesFaulted(String timesFaulted) {
+			this.timesMastered.set(timesFaulted);
+		}
+
+		public String getTimesFailed() {
+			return timesFailed.get();
+		}
+		
+		public void setTimesFailed(String timesFailed) {
+			this.timesFailed.set(timesFailed);
+		}		
 	}
 }

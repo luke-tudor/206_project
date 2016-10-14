@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -214,13 +213,16 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void passedFirstTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				currentWordList.substring(0, currentWordList.length() - 4) 
+				"" + currentWordList.substring(0, currentWordList.length() - 4) 
 				+ "." + currentSubList + ".mastered.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
 			protected void passedSecondTime() {
+				ioHelper.addLineToFile(getLastTestedWord(),
+				"" + currentWordList.substring(0, currentWordList.length() - 4) 
+				+ "." + currentSubList + ".faulted.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
@@ -229,14 +231,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 			@Override
 			protected void failedSecondTime() {
+				ioHelper.addLineToFile(getLastTestedWord(),
+				"" + currentWordList.substring(0, currentWordList.length() - 4) 
+				+ "." + currentSubList + ".failed.txt");
 				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 		};
 		try {
-			/*primaryStage.hide();
-			newQuiz.start(primaryStage);
-			primaryStage.centerOnScreen();*/
 			newQuiz.start(primaryStage);
 		} catch (Exception e) {}
 	}
@@ -246,7 +248,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * mastered word for each word in the word list.
 	 */
 	private void displayStatistics() {
-		Application displayStatistics = new DisplayStatistics(scene, wordlist,masteredList,failedList,sublists, sublists.indexOf(currentSubList));
+		Application displayStatistics = new DisplayStatistics(scene, wordlist, sublists, currentWordList, sublists.indexOf(currentSubList));
 		try {
 			displayStatistics.start(primaryStage);
 		} catch (Exception e) {}
