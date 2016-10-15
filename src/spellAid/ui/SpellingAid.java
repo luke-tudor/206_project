@@ -55,7 +55,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
 	
-	private static final String STYLESHEET = new URLString("style/appstyle.css").getURL();
+	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	/*
 	 * These fields refer to the buttons in the GUI.
@@ -213,7 +213,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void passedFirstTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				"" + currentWordList.substring(0, currentWordList.length() - 4) 
+				currentWordList.substring(0, currentWordList.length() - 4) 
 				+ "." + currentSubList + ".mastered.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
@@ -221,7 +221,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void passedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				"" + currentWordList.substring(0, currentWordList.length() - 4) 
+				currentWordList.substring(0, currentWordList.length() - 4) 
 				+ "." + currentSubList + ".faulted.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
@@ -232,7 +232,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void failedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				"" + currentWordList.substring(0, currentWordList.length() - 4) 
+				currentWordList.substring(0, currentWordList.length() - 4) 
 				+ "." + currentSubList + ".failed.txt");
 				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}

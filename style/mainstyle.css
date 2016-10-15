@@ -1,0 +1,12 @@
+
+.root{
+	/*-fx-background-color: #CCFF99;*/
+}
+
+.button{
+	-fx-font: 14pt "DejaVuSans";
+}
+
+.label{
+	-fx-font: 14pt "DejaVuSans";
+}

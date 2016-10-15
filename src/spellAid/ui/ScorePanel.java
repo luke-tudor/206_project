@@ -14,6 +14,10 @@ public class ScorePanel extends GridPane {
 	private Stopwatch stopwatch;
 	
 	private Label numLeft;
+	
+	private int numDone;
+	
+	private int numCorrect;
 
 	public ScorePanel(int numWords) {
 		super();
@@ -21,7 +25,10 @@ public class ScorePanel extends GridPane {
 		labels = new Label[]{new Label("Number of words correct:"),
 				new Label("Time:"), new Label("Number of words left:")};
 		
-		currentScore = new Label("0/0");
+		numDone = 0;
+		numCorrect = 0;
+		
+		currentScore = new Label(numCorrect + "/" + numDone);
 		
 		stopwatch = new Stopwatch();
 		
@@ -43,5 +50,13 @@ public class ScorePanel extends GridPane {
 	
 	public void startTimer() {
 		stopwatch.start();
+	}
+	
+	public void updateScore(boolean correct) {
+		numDone++;
+		if (correct) {
+			numCorrect++;
+		}
+		currentScore.setText(numCorrect + "/" + numDone);
 	}
 }

@@ -19,6 +19,7 @@ import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
 import spellAid.ui.speaker.Speaker;
 import spellAid.ui.video.VideoEditor;
+import spellAid.util.URLString;
 
 /**
  * This class creates and runs the testing frame that the user sees when the 
@@ -36,6 +37,8 @@ public abstract class Quiz extends Application {
 	private static final String ENTER = "Enter";
 	private static final String BEGIN = "Begin Test";
 	private static final String REPEAT = "Repeat word";
+	
+	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	// These fields are the GUI components used to display the test.
 	private GraphicsPanel graphicsPanel;
@@ -124,11 +127,17 @@ public abstract class Quiz extends Application {
 		quizPanel.setPadding(new Insets(5));
 		quizPanel.setSpacing(5);
 
+		BackButton back = new BackButton();
+		back.setOnAction(e -> {primaryStage.setScene(parent); speaker.sock();});
+
+		HBox hbox = new HBox(back);
+		hbox.setPadding(new Insets(5));
+		hbox.setAlignment(Pos.TOP_LEFT);
+		
 		// Layout panels
 		BorderPane internalPanel = new BorderPane();
 		internalPanel.setCenter(scorePanel);
 		internalPanel.setBottom(quizPanel);
-		internalPanel.setLeft(graphicsPanel);
 		scorePanel.setAlignment(Pos.CENTER);
 		quizPanel.setAlignment(Pos.CENTER);
 		graphicsPanel.setAlignment(Pos.CENTER);
@@ -137,17 +146,12 @@ public abstract class Quiz extends Application {
 		//videoPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		//graphicsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
 
-		BackButton back = new BackButton();
-		back.setOnAction(e -> {primaryStage.setScene(parent); speaker.sock();});
-
-		HBox hbox = new HBox(back);
-		hbox.setPadding(new Insets(5));
-		hbox.setAlignment(Pos.TOP_LEFT);
-
 		BorderPane root = new BorderPane();
+		root.setLeft(graphicsPanel);
 		root.setCenter(internalPanel);
 		root.setTop(hbox);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
+		root.getStylesheets().add(STYLESHEET);
 
 		scene = new Scene(root);
 
@@ -299,6 +303,7 @@ public abstract class Quiz extends Application {
 			speaker.speak("correct... please spell " + testList[currentTestNum]);
 		else
 			speaker.speak("correct");
+		scorePanel.updateScore(true);
 	}
 
 	// If a user failed the first time, give them another chance to answer
@@ -323,6 +328,7 @@ public abstract class Quiz extends Application {
 		currentTestNum++;
 		hasChance = true;
 		//speaker.speak(testList[currentTestNum]);
+		scorePanel.updateScore(true);
 	}
 
 	// If a user failed both times, display a red graphic. Red means fail.
@@ -338,6 +344,7 @@ public abstract class Quiz extends Application {
 		currentTestNum++;
 		hasChance = true;
 		//speaker.speak(testList[currentTestNum]);
+		scorePanel.updateScore(false);
 	}
 
 	/*

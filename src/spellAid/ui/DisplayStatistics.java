@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import spellAid.util.ExtendedIOHelper;
+import spellAid.util.HiddenFileString;
 /**
  * 
  * Displays the statistics window and allows users to select what statistics level they wish to view
@@ -140,13 +141,13 @@ public class DisplayStatistics extends Application {
 				return numWords;
 			}
 		}
-
-		List<String> masteredList = ioHelper.readAllLines(currentList.substring(0, currentList.length() - 4) + "." 
-				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".mastered.txt");
-		List<String> faultedList = ioHelper.readAllLines(currentList + "." 
-				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".faulted.txt");
-		List<String> failedList = ioHelper.readAllLines(currentList + "." 
-				+ sublistSelectCombo.getSelectionModel().getSelectedItem() + ".failed.txt");
+		
+		String hiddenFile = new HiddenFileString(currentList.substring(0, currentList.length() - 4) + "." 
+				+ sublistSelectCombo.getSelectionModel().getSelectedItem()).getHiddenFileString();
+		
+		List<String> masteredList = ioHelper.readAllLines(hiddenFile + ".mastered.txt");
+		List<String> faultedList = ioHelper.readAllLines(hiddenFile + ".faulted.txt");
+		List<String> failedList = ioHelper.readAllLines(hiddenFile + ".failed.txt");
 		
 		data = FXCollections.observableArrayList();
 

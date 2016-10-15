@@ -8,7 +8,7 @@ package spellAid.ui;
 public enum AppDim {
 	
 	WIDTH(900),
-	HEIGHT(650);
+	HEIGHT(700);
 	
 	private int value;
 	
