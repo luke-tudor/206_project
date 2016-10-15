@@ -10,3 +10,15 @@
 .label{
 	-fx-font: 14pt "DejaVuSans";
 }
+
+.text-field{
+	-fx-font: 14pt "DejaVuSans";
+}
+
+.table-view{
+	-fx-font: 14pt "DejaVuSans";
+}
+
+.combo-box{
+	-fx-font: 14pt "DejaVuSans";
+}

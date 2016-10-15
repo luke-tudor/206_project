@@ -23,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import spellAid.util.io.ExtendedIOHelper;
 import spellAid.util.string.HiddenFileString;
+import spellAid.util.string.URLString;
 /**
  * 
  * Displays the statistics window and allows users to select what statistics level they wish to view
@@ -30,9 +31,10 @@ import spellAid.util.string.HiddenFileString;
  *
  */
 public class DisplayStatistics extends Application {
+	
+	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	private final ComboBox<String> sublistSelectCombo;
-	private final Button displayButton;
 	
 	private TableView<Row> table;
 
@@ -66,12 +68,10 @@ public class DisplayStatistics extends Application {
 
 		sublistSelectCombo = new ComboBox<>(FXCollections.observableList(sublists));
 
-		displayButton = new Button("Display Statistics");
 		table = new TableView<>();
 
-		//sublistSelectCombo.setOnAction(this);
-		displayButton.setOnAction(e -> {
-			if(e.getSource() == displayButton){
+		sublistSelectCombo.setOnAction(e -> {
+			if(e.getSource() == sublistSelectCombo){
 				updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
 			}
 		});
@@ -82,7 +82,6 @@ public class DisplayStatistics extends Application {
 		GridPane controls = new GridPane();
 		controls.setHgap(5);
 		controls.add(sublistSelectCombo, 0, 0);
-		controls.add(displayButton, 1, 0);
 		
 		TableColumn<Row, String> wordNameCol = new TableColumn<>("Word");
 		wordNameCol.setMinWidth(100);
@@ -121,6 +120,7 @@ public class DisplayStatistics extends Application {
 		root.setTop(hbox);
 		root.setCenter(grid);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
+		root.getStylesheets().add(STYLESHEET);
 
 		scene = new Scene(root);
 	}

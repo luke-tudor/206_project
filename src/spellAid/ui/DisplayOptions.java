@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import spellAid.util.string.URLString;
 import spellAid.util.string.UnqualifiedFileString;
 
 /**
@@ -28,6 +29,8 @@ import spellAid.util.string.UnqualifiedFileString;
  */
 public abstract class DisplayOptions extends Application implements EventHandler<ActionEvent> {
 
+	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
+	
 	private final ComboBox<String> voiceCombo;
 	private final ComboBox<String> listCombo;
 	private final ComboBox<String> sublistCombo;
@@ -103,6 +106,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		root.setTop(hbox);
 		root.setCenter(grid);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
+		root.getStylesheets().add(STYLESHEET);
 
 		scene = new Scene(root);
 	}
