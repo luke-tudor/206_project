@@ -173,7 +173,6 @@ public class VideoManipulator extends VBox {
 				sb.append(" -vf negate");
 			}
 			sb.append(" -r " + fps.getValue());
-			System.out.println(sb.toString());
 			return sb.toString();
 		}
 	}

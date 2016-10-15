@@ -36,12 +36,12 @@ public class VideoPanel extends BorderPane {
 		BorderPane contentPanel = new BorderPane();
 		contentPanel.setPrefSize(600, 400);
 
-		setVideo(BUNNYPATH);
-		
 		// Create and configure a panel for the buttons
 		btnPanel = new ButtonPanel();
 		for (Node n : btnPanel.getChildren())
 			n.setDisable(true);
+		
+		setVideo(BUNNYPATH);
 
 		setBottom(btnPanel);
 		setId("videoPane");
