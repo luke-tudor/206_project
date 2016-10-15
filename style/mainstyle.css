@@ -24,9 +24,13 @@
 }
 
 .slider{
-	/*-fx-font: 14pt "DejaVuSans";*/
+	-fx-font: 14pt "DejaVuSans";
 }
 
 #videoPane{
 	-fx-background-color: lightgrey;
+}
+
+.radio-button{
+	-fx-font: 14pt "DejaVuSans";
 }

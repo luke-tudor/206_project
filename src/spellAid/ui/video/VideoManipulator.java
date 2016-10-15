@@ -123,7 +123,7 @@ public class VideoManipulator extends VBox {
 					new Label("Change Framerate:")};
 			negate = new RadioButton();
 			fps = new Slider(1, 24, 24);
-			fps.setShowTickLabels(true);
+			//fps.setShowTickLabels(true);
 
 			GridPane root = new GridPane();
 			root.setVgap(10);
@@ -149,7 +149,7 @@ public class VideoManipulator extends VBox {
 
 			for (int i = 0; i < sliders.length; i++) {
 				root.add(sliders[i], 3, i);
-				sliders[i].setShowTickLabels(true);
+				//sliders[i].setShowTickLabels(true);
 			}
 
 			root.add(progressBar, 1, 0);
