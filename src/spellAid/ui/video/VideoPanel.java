@@ -40,11 +40,11 @@ public class VideoPanel extends BorderPane {
 		
 		// Create and configure a panel for the buttons
 		btnPanel = new ButtonPanel();
-		btnPanel.setStyle("-fx-background-color: lightgrey;");
 		for (Node n : btnPanel.getChildren())
 			n.setDisable(true);
 
 		setBottom(btnPanel);
+		setId("videoPane");
 	}
 
 	public void start() {
@@ -75,7 +75,6 @@ public class VideoPanel extends BorderPane {
 
 		contentPanel.setCenter(mediaView);
 
-		contentPanel.setStyle("-fx-background-color: lightgrey;");
 		setCenter(contentPanel);
 	}
 

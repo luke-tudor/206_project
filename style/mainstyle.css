@@ -26,3 +26,7 @@
 .slider{
 	/*-fx-font: 14pt "DejaVuSans";*/
 }
+
+#videoPane{
+	-fx-background-color: lightgrey;
+}
