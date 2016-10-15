@@ -1,4 +1,4 @@
-package spellAid.util;
+package spellAid.util.io;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

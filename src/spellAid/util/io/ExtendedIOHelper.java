@@ -1,4 +1,4 @@
-package spellAid.util;
+package spellAid.util.io;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Path;

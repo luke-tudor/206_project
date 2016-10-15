@@ -1,4 +1,4 @@
-package spellAid.util;
+package spellAid.util.string;
 
 import java.util.Random;
 import java.util.Set;

@@ -21,8 +21,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import spellAid.util.ExtendedIOHelper;
-import spellAid.util.HiddenFileString;
+import spellAid.util.io.ExtendedIOHelper;
+import spellAid.util.string.HiddenFileString;
 /**
  * 
  * Displays the statistics window and allows users to select what statistics level they wish to view

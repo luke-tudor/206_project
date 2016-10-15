@@ -11,7 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import spellAid.util.URLString;
+import spellAid.util.string.URLString;
 
 /**
  * This class creates and shows a video using VLC media player.

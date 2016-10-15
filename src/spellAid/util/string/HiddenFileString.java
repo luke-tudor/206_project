@@ -1,4 +1,4 @@
-package spellAid.util;
+package spellAid.util.string;
 
 public class HiddenFileString {
 	

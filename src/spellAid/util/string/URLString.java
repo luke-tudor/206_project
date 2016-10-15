@@ -1,4 +1,4 @@
-package spellAid.util;
+package spellAid.util.string;
 
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;

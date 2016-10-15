@@ -19,7 +19,7 @@ import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
 import spellAid.ui.speaker.Speaker;
 import spellAid.ui.video.VideoEditor;
-import spellAid.util.URLString;
+import spellAid.util.string.URLString;
 
 /**
  * This class creates and runs the testing frame that the user sees when the 

@@ -27,9 +27,10 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import spellAid.util.ExtendedIOHelper;
-import spellAid.util.URLString;
-import spellAid.util.UniqueRandomListMaker;
+import spellAid.util.io.ExtendedIOHelper;
+import spellAid.util.string.HiddenFileString;
+import spellAid.util.string.URLString;
+import spellAid.util.string.UniqueRandomListMaker;
 
 /**
  * The SpellingAid program creates a GUI which implements the functionality
@@ -54,7 +55,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
-	
+
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	/*
@@ -77,7 +78,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private List<List<String>> failedList;
 
 	private String currentSubList;
-	
+
 	private String currentWordList;  
 
 
@@ -86,7 +87,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private String currentSpeech;
 
 	private Stage primaryStage;
-	
+
 	private Scene scene;
 
 	@Override
@@ -97,7 +98,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		ioHelper = new ExtendedIOHelper();
 
 		currentWordList = "user_lists/NZCER-spelling-lists.txt";
-		
+
 		createWordList();
 		createStatsLists();
 
@@ -202,6 +203,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		UniqueRandomListMaker urlm = new UniqueRandomListMaker();
 		String[] testList = urlm.getUniqueList(uniqueLines, numTests);
 
+		String hiddenFile = new HiddenFileString(currentWordList.substring(0, currentWordList.length() - 4) 
+				+ "." + currentSubList).getHiddenFileString();
+
 		/*
 		 * The Quiz class, which creates a GUI to run the quiz is being
 		 * implemented by an anonymous class that implements the "New Quiz"
@@ -213,16 +217,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void passedFirstTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				currentWordList.substring(0, currentWordList.length() - 4) 
-				+ "." + currentSubList + ".mastered.txt");
+						hiddenFile + ".mastered.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
 			protected void passedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				currentWordList.substring(0, currentWordList.length() - 4) 
-				+ "." + currentSubList + ".faulted.txt");
+						hiddenFile + ".faulted.txt");
 				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
@@ -232,8 +234,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			@Override
 			protected void failedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
-				currentWordList.substring(0, currentWordList.length() - 4) 
-				+ "." + currentSubList + ".failed.txt");
+						hiddenFile + ".failed.txt");
 				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
