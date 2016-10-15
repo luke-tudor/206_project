@@ -9,8 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import spellAid.ui.AppDim;
 import spellAid.ui.BackButton;
+import spellAid.util.string.URLString;
 
 public class VideoEditor extends Application {
+	
+	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 	
 	private Scene scene;
 	
@@ -53,6 +56,7 @@ public class VideoEditor extends Application {
 		root.setCenter(vp);
 		root.setBottom(vm);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
+		root.getStylesheets().add(STYLESHEET);
 		
 		scene = new Scene(root);
 	}

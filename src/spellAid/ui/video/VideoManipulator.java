@@ -10,13 +10,14 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -110,9 +111,7 @@ public class VideoManipulator extends VBox {
 	}
 
 	private class ControlPanel extends VBox {
-
-		private Label[] labels;
-
+		
 		private RadioButton negate;
 
 		private Slider fps;
@@ -120,41 +119,48 @@ public class VideoManipulator extends VBox {
 		private Slider[] sliders;
 
 		private ControlPanel() {
-			labels = new Label[]{new Label("Rendering Progress:"), new Label("Invert Colour:"),
+			Label[] labels = new Label[]{new Label("Rendering Progress:"), new Label("Invert Colour:"),
 					new Label("Change Framerate:")};
 			negate = new RadioButton();
 			fps = new Slider(1, 24, 24);
 			fps.setShowTickLabels(true);
 
-			GridPane grid = new GridPane();
-			grid.setVgap(5);
-			grid.setHgap(5);
-			grid.setAlignment(Pos.CENTER);
+			GridPane root = new GridPane();
+			root.setVgap(10);
+			root.setHgap(10);
+			root.setAlignment(Pos.CENTER);
 			setPadding(new Insets(5));
 
-			for (int i = 0; i < labels.length; i++){
-				grid.add(labels[i], 0, i);
+			for (int i = 0; i < labels.length; i++) {
+				root.add(labels[i], 0, i);
 			}
-
-			HBox eq = new HBox(new Label("Change contrast, brightness and saturation:"));
-			eq.setAlignment(Pos.CENTER);
+			
+			labels = new Label[] {new Label("Change Contrast:"), new Label("Change Brightness:"),
+					new Label("Change Saturation:")};
+			
+			for (int i = 0; i < labels.length; i++) {
+				root.add(labels[i], 2, i);
+			}
 			
 			sliders = new Slider[3];
 			sliders[0] = new Slider(-2, 2, 1);
 			sliders[1] = new Slider(-1, 1, 0);
 			sliders[2] = new Slider(0, 3, 1);
 
-			for (Slider s : sliders) {
-				eq.getChildren().add(s);
-				s.setShowTickLabels(true);
+			for (int i = 0; i < sliders.length; i++) {
+				root.add(sliders[i], 3, i);
+				sliders[i].setShowTickLabels(true);
 			}
 
-			grid.add(progressBar, 1, 0);
-			grid.add(negate, 1, 1);
-			grid.add(fps, 1, 2);
+			root.add(progressBar, 1, 0);
+			root.add(negate, 1, 1);
+			root.add(fps, 1, 2);
 			
-			getChildren().add(grid);
-			getChildren().add(eq);
+			for (Node n : root.getChildren()) {
+				((Control) n).setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			}
+			
+			getChildren().add(root);
 			setAlignment(Pos.CENTER);
 		}
 
