@@ -1,5 +1,10 @@
 package spellAid.util.string;
 
+/**
+ * This class turns a qualified file path into an unqualified file path.
+ * 
+ * @author Luke Tudor
+ */
 public class UnqualifiedFileString {
 	
 	private String unqualifiedFile;
