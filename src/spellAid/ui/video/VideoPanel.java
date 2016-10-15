@@ -62,6 +62,9 @@ public class VideoPanel extends BorderPane {
 	}
 	
 	public void setVideo(String videoPath) {
+		
+		btnPanel.reset();
+		
 		BorderPane contentPanel = new BorderPane();
 		contentPanel.setPrefSize(600, 400);
 
@@ -129,6 +132,11 @@ public class VideoPanel extends BorderPane {
 				player.stop();
 				play.setText(PLTEXT);
 			}
+		}
+		
+		private void reset() {
+			play.setText(PATEXT);
+			mute.setText(MUTEXT);
 		}
 	}
 }

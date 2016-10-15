@@ -201,7 +201,7 @@ public abstract class Quiz extends Application {
 		} else {
 			testButton.setText(ENTER);
 			enabledList.setShouldComponentBeEnabled(repeatButton, true);
-			speaker.speak(testList[currentTestNum]);
+			speaker.speak("please spell " + testList[currentTestNum]);
 			textField.requestFocus();
 			textField.selectAll();
 		}
@@ -233,6 +233,8 @@ public abstract class Quiz extends Application {
 	 * Invoked when the quiz is complete
 	 */
 	private void quizComplete() {
+		
+		scorePanel.stopTimer();
 
 		// number of correct words
 		int numCorrect = 0;
@@ -253,8 +255,8 @@ public abstract class Quiz extends Application {
 			alert.setTitle("Test Results");
 			alert.setContentText("Well done!"
 					+ " You got " + numCorrect + " out of " 
-					+ testResults.length + ".\nWould you like to see a "
-					+ "video?");
+					+ testResults.length + ".\nWould you like to use the "
+					+ "video editor?");
 
 			// Asks if user wants a video
 			Optional<ButtonType> reply = alert.showAndWait();
@@ -263,7 +265,7 @@ public abstract class Quiz extends Application {
 			if (reply.get() == yes) {
 				VideoEditor ve = new VideoEditor(scene);
 				try {
-					ve.start(new Stage());
+					ve.start(primaryStage);
 				} catch (Exception e) {}
 			}
 
@@ -296,6 +298,7 @@ public abstract class Quiz extends Application {
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewTickShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = true;
+		hasChance = true;
 		currentTestNum++;
 		enabledList.setShouldComponentBeEnabled(repeatButton, true);
 		textField.clear();
@@ -321,12 +324,15 @@ public abstract class Quiz extends Application {
 		passedSecondTime();
 		enabledList.setShouldComponentBeEnabled(repeatButton, false);
 		repeatButton.setDisable(true);
-		speaker.speak("correct");
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewTickShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = true;
 		currentTestNum++;
 		hasChance = true;
+		if (currentTestNum != testList.length)
+			speaker.speak("correct... please spell " + testList[currentTestNum]);
+		else
+			speaker.speak("correct");
 		//speaker.speak(testList[currentTestNum]);
 		scorePanel.updateScore(true);
 	}
@@ -337,12 +343,15 @@ public abstract class Quiz extends Application {
 		enabledList.setShouldComponentBeEnabled(repeatButton, false);
 		repeatButton.setDisable(true);
 		textField.clear();
-		speaker.speak("incorrect");
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewCrossShape(),
 				testList[currentTestNum]);
 		testResults[currentTestNum] = false;
 		currentTestNum++;
 		hasChance = true;
+		if (currentTestNum != testList.length)
+			speaker.speak("incorrect... please spell " + testList[currentTestNum]);
+		else
+			speaker.speak("incorrect");
 		//speaker.speak(testList[currentTestNum]);
 		scorePanel.updateScore(false);
 	}

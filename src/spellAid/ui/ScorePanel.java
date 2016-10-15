@@ -52,6 +52,10 @@ public class ScorePanel extends GridPane {
 		stopwatch.start();
 	}
 	
+	public void stopTimer() {
+		stopwatch.stop();
+	}
+	
 	public void updateScore(boolean correct) {
 		numDone++;
 		if (correct) {
