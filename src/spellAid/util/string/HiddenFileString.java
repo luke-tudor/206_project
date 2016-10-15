@@ -1,5 +1,11 @@
 package spellAid.util.string;
 
+/**
+ * This class turns a qualified file path into the same path with a '.' in front
+ * of the file name.
+ * 
+ * @author Luke Tudor
+ */
 public class HiddenFileString {
 	
 	private String hiddenFile;

@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import spellAid.util.string.UnqualifiedFileString;
 
 /**
  * Creates a Frame that allows the user to choose what voice they want
@@ -52,8 +53,15 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		voices.add("USA voice");
 
 		voiceCombo = new ComboBox<>(FXCollections.observableList(voices));
+		
+		ArrayList<String> files = new ArrayList<>();
+		for (String file : lists) {
+			if (!file.startsWith(".")) {
+				files.add(file);
+			}
+		}
 
-		listCombo = new ComboBox<>(FXCollections.observableArrayList(lists));
+		listCombo = new ComboBox<>(FXCollections.observableList(files));
 
 		sublistCombo = new ComboBox<>(FXCollections.observableList(sublists));
 
@@ -62,7 +70,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		Label sublistLabel = new Label("Sub-list:");
 
 		voiceCombo.getSelectionModel().select(currentSpeech);
-		listCombo.getSelectionModel().select(currentList);
+		listCombo.getSelectionModel().select(new UnqualifiedFileString(currentList).getUnqualifiedFile());
 		sublistCombo.getSelectionModel().select(currentSubList);
 
 		voiceCombo.setOnAction(this);
