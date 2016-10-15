@@ -1,36 +1,36 @@
 
-.root{
+.root {
 	/*-fx-background-color: #CCFF99;*/
 }
 
-.button{
+.button {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-.label{
+.label {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-.text-field{
+.text-field {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-.table-view{
+.table-view {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-.combo-box{
+.combo-box {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-.slider{
+.slider {
 	-fx-font: 14pt "DejaVuSans";
 }
 
-#videoPane{
+#videoPane {
 	-fx-background-color: lightgrey;
 }
 
-.radio-button{
+.radio-button {
 	-fx-font: 14pt "DejaVuSans";
 }
