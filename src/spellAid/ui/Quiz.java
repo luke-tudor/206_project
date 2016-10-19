@@ -142,10 +142,6 @@ public abstract class Quiz extends Application {
 		quizPanel.setAlignment(Pos.CENTER);
 		graphicsPanel.setAlignment(Pos.CENTER);
 
-		// Add borders to panels
-		//videoPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
-		//graphicsPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-
 		BorderPane root = new BorderPane();
 		root.setLeft(graphicsPanel);
 		root.setCenter(internalPanel);
@@ -333,7 +329,6 @@ public abstract class Quiz extends Application {
 			speaker.speak("correct... please spell " + testList[currentTestNum]);
 		else
 			speaker.speak("correct");
-		//speaker.speak(testList[currentTestNum]);
 		scorePanel.updateScore(true);
 	}
 
@@ -352,7 +347,6 @@ public abstract class Quiz extends Application {
 			speaker.speak("incorrect... please spell " + testList[currentTestNum]);
 		else
 			speaker.speak("incorrect");
-		//speaker.speak(testList[currentTestNum]);
 		scorePanel.updateScore(false);
 	}
 
