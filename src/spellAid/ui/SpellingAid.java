@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javafx.application.Application;
@@ -18,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -62,8 +64,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private Button newQuiz;
 	private Button viewStatistics;
-	private Button addList;
 	private Button options;
+	private Button quit;
 
 	/*
 	 * This field is a helper object to easily deal with file IO by removing the
@@ -106,27 +108,26 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		newQuiz = new Button("New Quiz");
 		viewStatistics = new Button("View Statistics");
-		addList = new Button("Add List");
 		options = new Button("Options");
+		quit = new Button("Quit");
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(50));
 		grid.setVgap(5);
 		grid.add(newQuiz, 0, 0);
 		grid.add(viewStatistics, 0, 1);
-		grid.add(addList, 0, 2);
-		grid.add(options, 0, 3);
+		grid.add(options, 0, 2);
+		grid.add(quit, 0, 3);
 		grid.setAlignment(Pos.CENTER);
 
 		// This simply adds this object as a listener for these buttons
 		// and adds all the buttons to the frame.
-		Button[] buttons = {newQuiz, viewStatistics, addList, options};
+		Button[] buttons = {newQuiz, viewStatistics, quit, options};
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
 			btn.setPrefWidth(400);
 			btn.setPrefHeight(100);
-			btn.setFont(new Font(16));
 			btn.getStylesheets().add(STYLESHEET);
 		}
 
@@ -162,10 +163,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			runNewQuiz();
 		} else if (e.getSource() == viewStatistics) {
 			displayStatistics();
-		} else if (e.getSource() == addList) {
-			addList();
 		} else if (e.getSource() == options) {
 			displayOptionsWindow();
+		} else if (e.getSource() == quit) {
+			quit();
 		}
 	}
 
@@ -254,18 +255,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		} catch (Exception e) {}
 	}
 
-	private void addList() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files (*.txt)", "*.txt"));
-		fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
-		File listToAdd = fileChooser.showOpenDialog(primaryStage);
-		try {
-			Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
-					FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
-		} catch (IOException | NullPointerException e) {}
-		WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
-	}
-
 	private void displayOptionsWindow() {
 		Application displayOptions =
 				new DisplayOptions(scene, WORDLISTS, currentWordList, sublists, currentSubList, currentSpeech) {
@@ -318,6 +307,21 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		try {
 			displayOptions.start(primaryStage);
 		} catch (Exception e) {}
+	}
+	
+	private void quit() {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		
+		ButtonType yes = new ButtonType("Yes");
+		ButtonType no = new ButtonType("No");
+		
+		alert.getButtonTypes().setAll(yes, no);
+		alert.setTitle("Alert!");
+		alert.setContentText("Are you sure you want to quit?");
+		Optional<ButtonType> reply = alert.showAndWait();
+		if (reply.get() == yes) {
+			primaryStage.hide();
+		}
 	}
 
 	private void createWordList() {
