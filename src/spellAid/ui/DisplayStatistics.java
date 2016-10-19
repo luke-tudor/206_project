@@ -25,10 +25,10 @@ import spellAid.util.io.ExtendedIOHelper;
 import spellAid.util.string.HiddenFileString;
 import spellAid.util.string.URLString;
 /**
+ * Displays the statistics window and allows users to select 
+ * what statistics level they wish to view.
  * 
- * Displays the statistics window and allows users to select what statistics level they wish to view
  * @author Aprajit Gandhi and Luke Tudor
- *
  */
 public class DisplayStatistics extends Application {
 	
@@ -36,7 +36,7 @@ public class DisplayStatistics extends Application {
 
 	private final ComboBox<String> sublistSelectCombo;
 	
-	private TableView<Row> table;
+	private TableView<WordStats> table;
 
 	private Scene scene;
 
@@ -48,7 +48,7 @@ public class DisplayStatistics extends Application {
 
 	private String currentList;
 	
-	private ObservableList<Row> data;
+	private ObservableList<WordStats> data;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -83,21 +83,21 @@ public class DisplayStatistics extends Application {
 		controls.setHgap(5);
 		controls.add(sublistSelectCombo, 0, 0);
 		
-		TableColumn<Row, String> wordNameCol = new TableColumn<>("Word");
+		TableColumn<WordStats, String> wordNameCol = new TableColumn<>("Word");
 		wordNameCol.setMinWidth(100);
-		wordNameCol.setCellValueFactory(new PropertyValueFactory<Row, String>("word"));
+		wordNameCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("word"));
 		
-		TableColumn<Row, String> masteredCol = new TableColumn<>("Mastered");
+		TableColumn<WordStats, String> masteredCol = new TableColumn<>("Mastered");
 		masteredCol.setMinWidth(100);
-		masteredCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesMastered"));
+		masteredCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesMastered"));
 		
-		TableColumn<Row, String> faultedCol = new TableColumn<>("Faulted");
+		TableColumn<WordStats, String> faultedCol = new TableColumn<>("Faulted");
 		faultedCol.setMinWidth(100);
-		faultedCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesFaulted"));
+		faultedCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesFaulted"));
 		
-		TableColumn<Row, String> failedCol = new TableColumn<>("Failed");
+		TableColumn<WordStats, String> failedCol = new TableColumn<>("Failed");
 		failedCol.setMinWidth(100);
-		failedCol.setCellValueFactory(new PropertyValueFactory<Row, String>("timesFailed"));
+		failedCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesFailed"));
 		
 		table.setPlaceholder(new Label("No statistics to display"));
 		table.getColumns().addAll(Arrays.asList(wordNameCol, masteredCol, faultedCol, failedCol));
@@ -164,19 +164,24 @@ public class DisplayStatistics extends Application {
 			 * statement that evaluates as false if a word has never been tested.
 			 */
 			if (numMastered != 0 || numFaulted != 0 || numFailed != 0){
-				data.add(new Row(word, numMastered, numFaulted, numFailed));
+				data.add(new WordStats(word, numMastered, numFaulted, numFailed));
 			}
 		}
 		table.setItems(data);
 	}
 	
-	public static class Row {
+	/**
+	 * Simple class used to represent a row in the table.
+	 * 
+	 * @author Luke Tudor
+	 */
+	public static class WordStats {
 		private SimpleStringProperty word;
 		private SimpleStringProperty timesMastered;
 		private SimpleStringProperty timesFaulted;
 		private SimpleStringProperty timesFailed;
 		
-		public Row(String word, int timesMastered, int timesFaulted, int timesFailed) {
+		public WordStats(String word, int timesMastered, int timesFaulted, int timesFailed) {
 			this.word = new SimpleStringProperty(word);
 			this.timesMastered = new SimpleStringProperty(timesMastered + "");
 			this.timesFaulted = new SimpleStringProperty(timesFaulted + "");
@@ -213,6 +218,6 @@ public class DisplayStatistics extends Application {
 		
 		public void setTimesFailed(String timesFailed) {
 			this.timesFailed.set(timesFailed);
-		}		
+		}
 	}
 }

@@ -111,13 +111,8 @@ public abstract class DisplayOptions extends Application {
 		scene = new Scene(root);
 	}
 
-	// Overridden by the SpellingAid class to change the voice
+	// Overridden by the SpellingAid class to change the voice, sublist and List.
 	protected abstract void changeSpeech(String voice);
-
-	// Overridden by the SpellingAid class to change level
 	protected abstract void changeSublist(String sublist);
-
 	protected abstract void changeList(String list, ComboBox<String> sublistCombo);
-
-
 }
