@@ -18,7 +18,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -288,13 +287,31 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			}
 
 			@Override
-			protected void changeList(String list, ComboBox<String> sublistCombo) {
+			protected void changeList(String list) {
 				currentWordList = "user_lists/" + list;
 				createWordList();
 				createStatsLists();
 				sublistCombo.setItems(FXCollections.observableList(sublists));
-				currentSubList = sublists.get(0);
+				try {
+					currentSubList = sublists.get(0);
+				} catch (Exception e) {}
 				sublistCombo.getSelectionModel().select(currentSubList);
+			}
+
+			@Override
+			protected void addList() {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files (*.txt)", "*.txt"));
+				fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
+				File listToAdd = fileChooser.showOpenDialog(primaryStage);
+				try {
+					Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
+							FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
+				} catch (IOException | NullPointerException e) {}
+				WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
+				listCombo.setItems(FXCollections.observableList(getAllVisibleFiles(WORDLISTS)));
+				listCombo.getSelectionModel().select("NZCER-spelling-lists.txt");
+				changeList("NZCER-spelling-lists.txt");
 			}
 
 		};
@@ -318,7 +335,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				wordlist.get(listNumber).add(line);
 			}
 		}
-		currentSubList = sublists.get(0);
+		try {
+			currentSubList = sublists.get(0);
+		} catch (Exception e) {}
 	}
 
 	private void createStatsLists() {

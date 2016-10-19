@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import spellAid.util.string.URLString;
 import spellAid.util.string.UnqualifiedFileString;
@@ -30,12 +31,12 @@ public abstract class DisplayOptions extends Application {
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	private ComboBox<String> voiceCombo;
-	private ComboBox<String> listCombo;
-	private ComboBox<String> sublistCombo;
+	ComboBox<String> listCombo;
+	ComboBox<String> sublistCombo;
 
 	private Scene scene;
 
-	private Stage primaryStage;
+	Stage primaryStage;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -57,14 +58,7 @@ public abstract class DisplayOptions extends Application {
 
 		voiceCombo = new ComboBox<>(FXCollections.observableList(voices));
 
-		ArrayList<String> files = new ArrayList<>();
-		for (String file : lists) {
-			if (!file.startsWith(".")) {
-				files.add(file);
-			}
-		}
-
-		listCombo = new ComboBox<>(FXCollections.observableList(files));
+		listCombo = new ComboBox<>(FXCollections.observableList(getAllVisibleFiles(lists)));
 
 		sublistCombo = new ComboBox<>(FXCollections.observableList(sublists));
 
@@ -77,9 +71,9 @@ public abstract class DisplayOptions extends Application {
 		sublistCombo.getSelectionModel().select(currentSubList);
 
 		voiceCombo.setOnAction(e -> changeSpeech(voiceCombo.getSelectionModel().getSelectedItem()));
-		listCombo.setOnAction(e -> changeList(listCombo.getSelectionModel().getSelectedItem(), sublistCombo));
+		listCombo.setOnAction(e -> changeList(listCombo.getSelectionModel().getSelectedItem()));
 		sublistCombo.setOnAction(e -> changeSublist(sublistCombo.getSelectionModel().getSelectedItem()));
-
+		
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
 		grid.setVgap(5);
@@ -101,10 +95,16 @@ public abstract class DisplayOptions extends Application {
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
+		
+		Button addList = new Button("Add List");
+		addList.setOnAction(e -> addList());
+		
+		VBox vbox = new VBox(grid, addList);
+		vbox.setAlignment(Pos.CENTER);
 
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
-		root.setCenter(grid);
+		root.setCenter(vbox);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
 		root.getStylesheets().add(STYLESHEET);
 
@@ -114,5 +114,17 @@ public abstract class DisplayOptions extends Application {
 	// Overridden by the SpellingAid class to change the voice, sublist and List.
 	protected abstract void changeSpeech(String voice);
 	protected abstract void changeSublist(String sublist);
-	protected abstract void changeList(String list, ComboBox<String> sublistCombo);
+	protected abstract void changeList(String list);
+	protected abstract void addList();
+	
+	List<String> getAllVisibleFiles(String[] lists) {
+		List<String> files = new ArrayList<>();
+		for (String file : lists) {
+			if (!file.startsWith(".")) {
+				files.add(file);
+			}
+		}
+		return files;
+	}
+	
 }
