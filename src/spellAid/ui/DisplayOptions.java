@@ -5,8 +5,6 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,13 +25,13 @@ import spellAid.util.string.UnqualifiedFileString;
  * @author Aprajit Gandhi and Luke Tudor
  *
  */
-public abstract class DisplayOptions extends Application implements EventHandler<ActionEvent> {
+public abstract class DisplayOptions extends Application {
 
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
-	
-	private final ComboBox<String> voiceCombo;
-	private final ComboBox<String> listCombo;
-	private final ComboBox<String> sublistCombo;
+
+	private ComboBox<String> voiceCombo;
+	private ComboBox<String> listCombo;
+	private ComboBox<String> sublistCombo;
 
 	private Scene scene;
 
@@ -47,7 +45,9 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		primaryStage.show();
 	}
 
-
+	/*
+	 * Constructs the options frame providing all the dependencies from the parent class.
+	 */
 	public DisplayOptions(Scene parent, String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
 		super();
 
@@ -56,7 +56,7 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		voices.add("USA voice");
 
 		voiceCombo = new ComboBox<>(FXCollections.observableList(voices));
-		
+
 		ArrayList<String> files = new ArrayList<>();
 		for (String file : lists) {
 			if (!file.startsWith(".")) {
@@ -76,9 +76,9 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		listCombo.getSelectionModel().select(new UnqualifiedFileString(currentList).getUnqualifiedFile());
 		sublistCombo.getSelectionModel().select(currentSubList);
 
-		voiceCombo.setOnAction(this);
-		listCombo.setOnAction(this);
-		sublistCombo.setOnAction(this);
+		voiceCombo.setOnAction(e -> changeSpeech(voiceCombo.getSelectionModel().getSelectedItem()));
+		listCombo.setOnAction(e -> changeList(listCombo.getSelectionModel().getSelectedItem(), sublistCombo));
+		sublistCombo.setOnAction(e -> changeSublist(sublistCombo.getSelectionModel().getSelectedItem()));
 
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
@@ -94,14 +94,14 @@ public abstract class DisplayOptions extends Application implements EventHandler
 		listCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		sublistCombo.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		grid.setAlignment(Pos.CENTER);
-		
+
 		Button back = new BackButton();
 		back.setOnAction(e -> primaryStage.setScene(parent));
-		
+
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
-		
+
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
 		root.setCenter(grid);
@@ -119,15 +119,5 @@ public abstract class DisplayOptions extends Application implements EventHandler
 
 	protected abstract void changeList(String list, ComboBox<String> sublistCombo);
 
-	@Override
-	public void handle(ActionEvent e) {
-		if (e.getSource() == voiceCombo) {
-			changeSpeech(voiceCombo.getSelectionModel().getSelectedItem());
-		} else if (e.getSource() == listCombo) {
-			changeList(listCombo.getSelectionModel().getSelectedItem(), sublistCombo);
-		} else if (e.getSource() == sublistCombo) {
-			changeSublist(sublistCombo.getSelectionModel().getSelectedItem());
-		}
-	}
 
 }
