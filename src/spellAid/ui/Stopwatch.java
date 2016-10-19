@@ -6,6 +6,11 @@ import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 
+/**
+ * This class represents a simple graphical stop watch.
+ * 
+ * @author Luke Tudor
+ */
 public class Stopwatch extends Label {
 	
 	private long startTime;

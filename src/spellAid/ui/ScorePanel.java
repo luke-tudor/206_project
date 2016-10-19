@@ -5,6 +5,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
+/**
+ * This class represents a simple scoring panel for the user with a stop watch.
+ * 
+ * @author Luke Tudor
+ */
 public class ScorePanel extends GridPane {
 	
 	private Label[] labels;
