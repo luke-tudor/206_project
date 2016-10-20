@@ -1,9 +1,13 @@
 package spellAid.ui.video;
 
+import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -45,7 +49,20 @@ public class VideoEditor extends Application {
 		};
 		
 		BackButton back = new BackButton();
-		back.setOnAction(e -> primaryStage.setScene(parent));
+		back.setOnAction(e -> {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			
+			ButtonType yes = new ButtonType("Yes");
+			ButtonType no = new ButtonType("No");
+			
+			alert.getButtonTypes().setAll(yes, no);
+			alert.setTitle("Alert!");
+			alert.setContentText("Are you sure you want to go back to the quiz?");
+			Optional<ButtonType> reply = alert.showAndWait();
+			if (reply.get() == yes) {
+				primaryStage.setScene(parent);
+			}
+		});
 		
 		HBox backPanel = new HBox(back);
 		backPanel.setPadding(new Insets(5));
