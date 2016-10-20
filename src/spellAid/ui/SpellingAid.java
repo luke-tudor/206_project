@@ -302,6 +302,17 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				listCombo.getSelectionModel().select("NZCER-spelling-lists.txt");
 				changeList("NZCER-spelling-lists.txt");
 			}
+			
+			@Override
+			protected String getVoice(String selectedVoice) {
+				if (selectedVoice.equals("NZ voice")) {
+					return NZVOICE;
+				} else if(selectedVoice.equals("USA voice")) {
+					return USVOICE;
+				} else {
+					return null;
+				}
+			}
 
 		};
 		try {

@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -16,6 +17,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import spellAid.ui.speaker.AsynchronousComponentEnabler;
+import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
+import spellAid.ui.speaker.Speaker;
 import spellAid.util.string.URLString;
 import spellAid.util.string.UnqualifiedFileString;
 
@@ -51,7 +55,7 @@ public abstract class DisplayOptions extends Application {
 	 */
 	public DisplayOptions(Scene parent, String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
 		super();
-
+		
 		List<String> voices = new ArrayList<>();
 		voices.add("NZ voice");
 		voices.add("USA voice");
@@ -99,8 +103,19 @@ public abstract class DisplayOptions extends Application {
 		Button addList = new Button("Add List");
 		addList.setOnAction(e -> addList());
 		
-		VBox vbox = new VBox(grid, addList);
+		Button testVoice = new Button("Test Voice");
+		testVoice.setOnAction(e -> {
+			Speaker speaker = new ConcurrentAsynchronousSpeaker(
+					new AsynchronousComponentEnabler(new Node[]{testVoice}, true), getVoice(voiceCombo.getSelectionModel().getSelectedItem())) {
+				@Override
+				protected void asynchronousFinish() {}
+			};
+			speaker.speak("This is the " + voiceCombo.getSelectionModel().getSelectedItem());
+		});
+		
+		VBox vbox = new VBox(grid, addList, testVoice);
 		vbox.setAlignment(Pos.CENTER);
+		vbox.setSpacing(5);
 
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
@@ -109,6 +124,7 @@ public abstract class DisplayOptions extends Application {
 		root.getStylesheets().add(STYLESHEET);
 
 		scene = new Scene(root);
+
 	}
 
 	// Overridden by the SpellingAid class to change the voice, sublist and List.
@@ -116,6 +132,7 @@ public abstract class DisplayOptions extends Application {
 	protected abstract void changeSublist(String sublist);
 	protected abstract void changeList(String list);
 	protected abstract void addList();
+	protected abstract String getVoice(String selection);
 	
 	List<String> getAllVisibleFiles(String[] lists) {
 		List<String> files = new ArrayList<>();
