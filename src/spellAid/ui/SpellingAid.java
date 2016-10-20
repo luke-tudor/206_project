@@ -50,10 +50,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * to refer to the necessary text files. This is done so that the actual
 	 * name of the files is only found in one place, here.
 	 */
-
-
-	private static String[] WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
-
 	private static final String NZVOICE = "voices/nzvoice.scm";
 	private static final String USVOICE = "voices/usvoice.scm";
 
@@ -73,6 +69,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private ExtendedIOHelper ioHelper;
 
+	private String[] wordlists;
+	
 	private List<Set<String>> wordlist;
 	private List<String> sublists;
 	private List<List<String>> masteredList;
@@ -97,6 +95,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		this.primaryStage = primaryStage;
 
 		ioHelper = new ExtendedIOHelper();
+		
+		wordlists = FileSystems.getDefault().getPath("user_lists").toFile().list();
 
 		currentWordList = "user_lists/NZCER-spelling-lists.txt";
 
@@ -257,7 +257,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private void displayOptionsWindow() {
 		Application displayOptions =
-				new DisplayOptions(scene, WORDLISTS, currentWordList, sublists, currentSubList, currentSpeech) {
+				new DisplayOptions(scene, wordlists, currentWordList, sublists, currentSubList, currentSpeech) {
 
 			@Override
 			protected void changeSpeech(String voice) {
@@ -297,8 +297,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 					Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
 							FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
 				} catch (IOException | NullPointerException e) {}
-				WORDLISTS = FileSystems.getDefault().getPath("user_lists").toFile().list();
-				listCombo.setItems(FXCollections.observableList(getAllVisibleFiles(WORDLISTS)));
+				wordlists = FileSystems.getDefault().getPath("user_lists").toFile().list();
+				listCombo.setItems(FXCollections.observableList(getAllVisibleFiles(wordlists)));
 				listCombo.getSelectionModel().select("NZCER-spelling-lists.txt");
 				changeList("NZCER-spelling-lists.txt");
 			}
