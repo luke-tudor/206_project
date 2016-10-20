@@ -220,8 +220,9 @@ public abstract class Quiz extends Application {
 	private void repeatPressed() {
 		repeatButton.setDisable(true);
 		enabledList.setShouldComponentBeEnabled(repeatButton, true);
-		speaker.speak(testList[currentTestNum] + "... " +
-				testList[currentTestNum]);
+		speaker.speak(testList[currentTestNum]);
+		textField.requestFocus();
+		textField.selectAll();
 	}
 
 	/*
