@@ -37,7 +37,7 @@ public abstract class Quiz extends Application {
 	private static final String ENTER = "Enter";
 	private static final String BEGIN = "Begin Test";
 	private static final String REPEAT = "Repeat word";
-	
+
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
 
 	// These fields are the GUI components used to display the test.
@@ -114,7 +114,7 @@ public abstract class Quiz extends Application {
 		testButton.setOnAction(e -> wordEntered());
 		// Configure the button to be a constant size.
 		testButton.setPrefWidth(150);
-		
+
 		textField.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.ENTER && !testButton.isDisabled()){
 				wordEntered();
@@ -128,12 +128,26 @@ public abstract class Quiz extends Application {
 		quizPanel.setSpacing(5);
 
 		BackButton back = new BackButton();
-		back.setOnAction(e -> {primaryStage.setScene(parent); speaker.sock();});
+		back.setOnAction(e -> {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+			ButtonType yes = new ButtonType("Yes");
+			ButtonType no = new ButtonType("No");
+
+			alert.getButtonTypes().setAll(yes, no);
+			alert.setTitle("Alert!");
+			alert.setContentText("Are you sure you want to go back?");
+			Optional<ButtonType> reply = alert.showAndWait();
+			if (reply.get() == yes) {
+				primaryStage.setScene(parent);
+				speaker.sock();
+			}
+		});
 
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
-		
+
 		// Layout panels
 		BorderPane internalPanel = new BorderPane();
 		internalPanel.setCenter(scorePanel);
@@ -202,7 +216,7 @@ public abstract class Quiz extends Application {
 			textField.selectAll();
 		}
 	}
-	
+
 	private void repeatPressed() {
 		repeatButton.setDisable(true);
 		enabledList.setShouldComponentBeEnabled(repeatButton, true);
@@ -229,7 +243,7 @@ public abstract class Quiz extends Application {
 	 * Invoked when the quiz is complete
 	 */
 	private void quizComplete() {
-		
+
 		scorePanel.stopTimer();
 
 		// number of correct words
