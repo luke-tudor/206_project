@@ -136,7 +136,7 @@ public abstract class Quiz extends Application {
 
 			alert.getButtonTypes().setAll(yes, no);
 			alert.setTitle("Alert!");
-			alert.setContentText("Are you sure you want to go back?");
+			alert.setContentText("Are you sure you want to go back to the menu?");
 			Optional<ButtonType> reply = alert.showAndWait();
 			if (reply.get() == yes) {
 				primaryStage.setScene(parent);
