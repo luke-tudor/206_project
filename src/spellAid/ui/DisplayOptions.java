@@ -127,7 +127,6 @@ public abstract class DisplayOptions extends Application {
 
 	}
 
-	// Overridden by the SpellingAid class to change the voice, sublist and List.
 	protected abstract void changeSpeech(String voice);
 	protected abstract void changeSublist(String sublist);
 	protected abstract void changeList(String list);
