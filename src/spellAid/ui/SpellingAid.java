@@ -76,8 +76,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private List<Set<String>> wordlist;
 	private List<String> sublists;
-	private List<List<String>> masteredList;
-	private List<List<String>> failedList;
 
 	private String currentSubList;
 
@@ -104,7 +102,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		currentWordList = "user_lists/NZCER-spelling-lists.txt";
 
 		createWordList();
-		createStatsLists();
 
 		speechScript = NZVOICE;
 		currentSpeech = "NZ voice";
@@ -218,14 +215,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void passedFirstTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
 						hiddenFile + ".mastered.txt");
-				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
 			protected void passedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
 						hiddenFile + ".faulted.txt");
-				masteredList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 			@Override
@@ -235,7 +230,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void failedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
 						hiddenFile + ".failed.txt");
-				failedList.get(sublists.indexOf(currentSubList)).add(getLastTestedWord());
 			}
 
 		};
@@ -279,7 +273,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void changeList(String list) {
 				currentWordList = "user_lists/" + list;
 				createWordList();
-				createStatsLists();
 				sublistCombo.setItems(FXCollections.observableList(sublists));
 				try {
 					currentSubList = sublists.get(0);
@@ -366,17 +359,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		try {
 			currentSubList = sublists.get(0);
 		} catch (Exception e) {}
-	}
-
-	private void createStatsLists() {
-
-		masteredList = new ArrayList<List<String>>();
-		failedList = new ArrayList<List<String>>();
-
-		for (int i = 0; i < wordlist.size(); i++){
-			masteredList.add(new ArrayList<String>());
-			failedList.add(new ArrayList<String>());
-		}
 	}
 
 	private boolean isListValid(File file) {
