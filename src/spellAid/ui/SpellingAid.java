@@ -83,7 +83,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 
 	//currentSpeech is just the text on the combobox of the current voice
-	private String speechScript;
 	private String currentSpeech;
 
 	private Stage primaryStage;
@@ -103,7 +102,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		createWordList();
 
-		speechScript = NZVOICE;
 		currentSpeech = "NZ voice";
 
 		newQuiz = new Button("New Quiz");
@@ -209,7 +207,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		 * functionality. Some methods are overridden so that words can be
 		 * written to the corresponding files.
 		 */
-		Application newQuiz = new Quiz(scene, testList, speechScript) {
+		Application newQuiz = new Quiz(scene, testList, currentSpeech) {
 
 			@Override
 			protected void passedFirstTime() {
@@ -230,6 +228,17 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void failedSecondTime() {
 				ioHelper.addLineToFile(getLastTestedWord(),
 						hiddenFile + ".failed.txt");
+			}
+			
+			@Override
+			protected String selectVoice(String selection) {
+				if (selection.equals("NZ voice")) {
+					return NZVOICE;
+				} else if(selection.equals("USA voice")) {
+					return USVOICE;
+				} else {
+					return null;
+				}
 			}
 
 		};
@@ -257,10 +266,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			protected void changeSpeech(String voice) {
 				if (voice.equals("NZ voice")) {
 					currentSpeech= "NZ voice";
-					speechScript = NZVOICE;
 				} else if(voice.equals("USA voice")) {
 					currentSpeech="USA voice";
-					speechScript = USVOICE;
 				}
 			}
 

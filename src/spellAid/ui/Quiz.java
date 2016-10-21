@@ -1,8 +1,11 @@
 package spellAid.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -10,10 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import spellAid.ui.speaker.AsynchronousComponentEnabler;
 import spellAid.ui.speaker.ConcurrentAsynchronousSpeaker;
@@ -42,7 +47,7 @@ public abstract class Quiz extends Application {
 
 	// These fields are the GUI components used to display the test.
 	private GraphicsPanel graphicsPanel;
-	private HBox quizPanel;
+	private VBox quizPanel;
 	private Button repeatButton;
 	private Button testButton;
 	private TextField textField;
@@ -72,7 +77,7 @@ public abstract class Quiz extends Application {
 
 	// This constructor takes two parameters, the name of the JFrame, and the
 	// list of words to be tested.
-	public Quiz(Scene parent, String[] list, String scriptFile) {
+	public Quiz(Scene parent, String[] list, String currentSpeech) {
 		// Creates a JFrame and sets all the GUI fields.
 		super();
 
@@ -91,17 +96,7 @@ public abstract class Quiz extends Application {
 				repeatButton,
 				testButton
 		}, true);
-		speaker = new ConcurrentAsynchronousSpeaker(enabledList, scriptFile) {
-
-			@Override
-			protected void asynchronousFinish() {
-				// This is invoked when the speaker finishes
-				if (currentTestNum == testList.length){
-					quizComplete();
-				}
-			}
-
-		};
+		changeVoice(currentSpeech);
 		// Sets all the testing fields.
 		testList = list;
 		currentTestNum = 0;
@@ -122,8 +117,20 @@ public abstract class Quiz extends Application {
 		});
 
 		// Layout the panel which does the testing
-		quizPanel = new HBox(new Node[]{textField, repeatButton, testButton});
-		quizPanel.setAlignment(Pos.CENTER);
+		HBox testbox = new HBox(new Node[]{textField, repeatButton, testButton});
+		testbox.setAlignment(Pos.CENTER);
+		testbox.setPadding(new Insets(5));
+		testbox.setSpacing(5);
+		
+		List<String> voices = new ArrayList<>();
+		voices.add("NZ voice");
+		voices.add("USA voice");
+		
+		ComboBox<String> selectVoice = new ComboBox<>(FXCollections.observableList(voices));
+		selectVoice.getSelectionModel().select(currentSpeech);
+		selectVoice.setOnAction(e -> changeVoice(selectVoice.getSelectionModel().getSelectedItem()));
+		
+		quizPanel = new VBox(selectVoice, testbox);
 		quizPanel.setPadding(new Insets(5));
 		quizPanel.setSpacing(5);
 
@@ -239,6 +246,8 @@ public abstract class Quiz extends Application {
 	protected abstract void passedSecondTime();
 
 	protected abstract void failedSecondTime();
+	
+	protected abstract String selectVoice(String selection);
 
 	/*
 	 * Invoked when the quiz is complete
@@ -372,5 +381,20 @@ public abstract class Quiz extends Application {
 	private boolean isSpelledCorrectly(){
 		return textField.getText().toLowerCase().equals(
 				testList[currentTestNum].toLowerCase());
+	}
+	
+	private void changeVoice(String voice) {
+		String scriptFile = selectVoice(voice);
+		speaker = new ConcurrentAsynchronousSpeaker(enabledList, scriptFile) {
+
+			@Override
+			protected void asynchronousFinish() {
+				// This is invoked when the speaker finishes
+				if (currentTestNum == testList.length){
+					quizComplete();
+				}
+			}
+
+		};
 	}
 }
