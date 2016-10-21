@@ -1,7 +1,10 @@
 package spellAid.ui;
 
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javafx.application.Application;
@@ -11,7 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -20,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import spellAid.util.io.ExtendedIOHelper;
 import spellAid.util.string.HiddenFileString;
@@ -108,6 +114,13 @@ public class DisplayStatistics extends Application {
 		grid.add(controls, 0, 0);
 		grid.add(table, 0, 1);
 		grid.setAlignment(Pos.CENTER);
+		
+		Button clearStatistics = new Button("Delete All Statistics");
+		clearStatistics.setOnAction(e -> clearStatistics());
+		
+		VBox vbox = new VBox(grid, clearStatistics);
+		vbox.setPadding(new Insets(5));
+		vbox.setAlignment(Pos.CENTER);
 
 		Button back = new BackButton();
 		back.setOnAction(e -> primaryStage.setScene(parent));
@@ -118,7 +131,7 @@ public class DisplayStatistics extends Application {
 
 		BorderPane root = new BorderPane();
 		root.setTop(hbox);
-		root.setCenter(grid);
+		root.setCenter(vbox);
 		root.setPrefSize(AppDim.WIDTH.getValue(), AppDim.HEIGHT.getValue());
 		root.getStylesheets().add(STYLESHEET);
 
@@ -168,6 +181,37 @@ public class DisplayStatistics extends Application {
 			}
 		}
 		table.setItems(data);
+	}
+	
+	private void clearStatistics() {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+		ButtonType yes = new ButtonType("Yes");
+		ButtonType no = new ButtonType("No");
+
+		alert.getButtonTypes().setAll(yes, no);
+		alert.setTitle("Alert!");
+		alert.setContentText("Are you sure you want to delete all statistics?");
+		Optional<ButtonType> reply = alert.showAndWait();
+		if (reply.get() == yes) {
+			List<String> statsFiles = getAllStatsFiles();
+			ExtendedIOHelper ioHelper = new ExtendedIOHelper();
+			for (String file : statsFiles) {
+				ioHelper.deleteIfExists("user_lists/" + file);
+			}
+			updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
+		}
+	}
+	
+	private List<String> getAllStatsFiles() {
+		String[] lists = FileSystems.getDefault().getPath("user_lists").toFile().list();
+		List<String> files = new ArrayList<>();
+		for (String file : lists) {
+			if (file.startsWith(".")) {
+				files.add(file);
+			}
+		}
+		return files;
 	}
 	
 	/**
