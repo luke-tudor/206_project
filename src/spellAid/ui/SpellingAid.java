@@ -189,10 +189,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		if (uniqueLines.isEmpty()){
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Alert!");
-			alert.setContentText("Please provide a list "
-					+ "in the working directory called \"NZCER-spelling-lists"
-					+ ".txt\" which provides a list of words that can be "
-					+ "tested");
+			alert.setContentText("Please provide some words in the selected list.");
 			alert.showAndWait();
 			return;
 		}
