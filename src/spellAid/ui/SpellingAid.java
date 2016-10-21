@@ -1,6 +1,7 @@
 package spellAid.ui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -8,9 +9,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -70,7 +73,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private ExtendedIOHelper ioHelper;
 
 	private String[] wordlists;
-	
+
 	private List<Set<String>> wordlist;
 	private List<String> sublists;
 	private List<List<String>> masteredList;
@@ -95,7 +98,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		this.primaryStage = primaryStage;
 
 		ioHelper = new ExtendedIOHelper();
-		
+
 		wordlists = FileSystems.getDefault().getPath("user_lists").toFile().list();
 
 		currentWordList = "user_lists/NZCER-spelling-lists.txt";
@@ -294,15 +297,26 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				fileChooser.setInitialDirectory(FileSystems.getDefault().getPath(".").toFile());
 				File listToAdd = fileChooser.showOpenDialog(primaryStage);
 				try {
-					Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
-							FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
+					if (isListValid(listToAdd)) {
+						Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
+								FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
+					} else {
+						Platform.runLater(() -> {
+							Alert alert = new Alert(Alert.AlertType.ERROR);
+							alert.setTitle("Alert!");
+							alert.setContentText("The provided list is not valid.\n"
+									+ "Please check the list formatting and try again.");
+							alert.showAndWait();
+						});
+						return;
+					}
 				} catch (IOException | NullPointerException e) {}
 				wordlists = FileSystems.getDefault().getPath("user_lists").toFile().list();
 				listCombo.setItems(FXCollections.observableList(getAllVisibleFiles(wordlists)));
 				listCombo.getSelectionModel().select("NZCER-spelling-lists.txt");
 				changeList("NZCER-spelling-lists.txt");
 			}
-			
+
 			@Override
 			protected String getVoice(String selectedVoice) {
 				if (selectedVoice.equals("NZ voice")) {
@@ -319,13 +333,13 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			displayOptions.start(primaryStage);
 		} catch (Exception e) {}
 	}
-	
+
 	private void quit() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		
+
 		ButtonType yes = new ButtonType("Yes");
 		ButtonType no = new ButtonType("No");
-		
+
 		alert.getButtonTypes().setAll(yes, no);
 		alert.setTitle("Alert!");
 		alert.setContentText("Are you sure you want to quit?");
@@ -364,6 +378,24 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			masteredList.add(new ArrayList<String>());
 			failedList.add(new ArrayList<String>());
 		}
+	}
+
+	private boolean isListValid(File file) {
+		if (file == null) {
+			throw new NullPointerException();
+		}
+		Scanner sc = null;
+		try {
+			sc = new Scanner(file);
+			String firstLine = sc.nextLine();
+			if (firstLine.startsWith("%")) {
+				return true;
+			}
+		} catch (FileNotFoundException e) {}
+		finally {
+			sc.close();
+		}
+		return false;
 	}
 
 	/*
