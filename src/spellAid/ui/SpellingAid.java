@@ -310,7 +310,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 						});
 						return;
 					}
-				} catch (IOException | NullPointerException e) {}
+				} catch (IOException | NullPointerException e) {
+					return;
+				}
 				wordlists = FileSystems.getDefault().getPath("user_lists").toFile().list();
 				listCombo.setItems(FXCollections.observableList(getAllVisibleFiles(wordlists)));
 				listCombo.getSelectionModel().select("NZCER-spelling-lists.txt");
