@@ -255,7 +255,7 @@ public abstract class Quiz extends Application {
 			}
 		}
 
-		if (numCorrect > 8) {
+		if (numCorrect > testList.length) {
 
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
