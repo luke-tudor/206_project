@@ -53,8 +53,6 @@ public class DisplayStatistics extends Application {
 	private ExtendedIOHelper ioHelper;
 
 	private String currentList;
-	
-	private ObservableList<WordStats> data;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -90,7 +88,7 @@ public class DisplayStatistics extends Application {
 		controls.add(sublistSelectCombo, 0, 0);
 		
 		TableColumn<WordStats, String> wordNameCol = new TableColumn<>("Word");
-		wordNameCol.setMinWidth(100);
+		wordNameCol.setMinWidth(200);
 		wordNameCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("word"));
 		
 		TableColumn<WordStats, String> masteredCol = new TableColumn<>("Mastered");
@@ -162,7 +160,7 @@ public class DisplayStatistics extends Application {
 		List<String> faultedList = ioHelper.readAllLines(hiddenFile + ".faulted.txt");
 		List<String> failedList = ioHelper.readAllLines(hiddenFile + ".failed.txt");
 		
-		data = FXCollections.observableArrayList();
+		ObservableList<WordStats> data = FXCollections.observableArrayList();
 
 		WordCounter wordCounter = new WordCounter();	
 
