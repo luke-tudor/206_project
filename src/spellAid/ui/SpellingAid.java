@@ -247,6 +247,18 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				}
 			}
 
+			@Override
+			protected void updateHighScore(String time) {/*
+				String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
+				List<String> scores = ioHelper.readAllLines("user_lists/." 
+						+ unqWordList + "." + currentSubList + ".score");
+				if (scores.size() != 3) {
+					String line = 
+					ioHelper.addLineToFile(line, "user_lists/." 
+							+ unqWordList + "." + currentSubList + ".score");
+				}*/
+			}
+
 		};
 		try {
 			newQuiz.start(primaryStage);
@@ -265,13 +277,13 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	}
 
 	private void displayHighScore() {
+		String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
 		List<String> scores = ioHelper.readAllLines("user_lists/." 
-				+ currentWordList + "." + currentSubList + ".score");
+				+ unqWordList + "." + currentSubList + ".score");
 
 		StringBuilder score = new StringBuilder();
 		score.append("Fastest Times to Complete\nList: " 
-				+ new UnqualifiedFileString(currentWordList).getUnqualifiedFile() 
-				+ "\nSublist: " + currentSubList + "\n");
+				+ unqWordList + "\nSublist: " + currentSubList + "\n");
 		for (int i = 0; i < 3; i++) {
 			String line = null;
 			try {

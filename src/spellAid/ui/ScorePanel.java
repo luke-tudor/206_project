@@ -76,4 +76,8 @@ public class ScorePanel extends GridPane {
 		numberOfWordsLeft--;
 		numLeft.setText(numberOfWordsLeft + "");
 	}
+	
+	public String getTime() {
+		return stopwatch.getText();
+	}
 }

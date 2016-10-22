@@ -248,6 +248,8 @@ public abstract class Quiz extends Application {
 	protected abstract void failedSecondTime();
 	
 	protected abstract String selectVoice(String selection);
+	
+	protected abstract void updateHighScore(String time);
 
 	/*
 	 * Invoked when the quiz is complete
@@ -255,6 +257,8 @@ public abstract class Quiz extends Application {
 	private void quizComplete() {
 
 		scorePanel.stopTimer();
+		
+		updateHighScore(scorePanel.getTime());
 
 		// number of correct words
 		int numCorrect = 0;
