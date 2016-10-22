@@ -34,6 +34,7 @@ import spellAid.util.io.ExtendedIOHelper;
 import spellAid.util.string.HiddenFileString;
 import spellAid.util.string.URLString;
 import spellAid.util.string.UniqueRandomListMaker;
+import spellAid.util.string.UnqualifiedFileString;
 
 /**
  * The SpellingAid program creates a GUI which implements the functionality
@@ -234,7 +235,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				ioHelper.addLineToFile(getLastTestedWord(),
 						hiddenFile + ".failed.txt");
 			}
-			
+
 			@Override
 			protected String selectVoice(String selection) {
 				if (selection.equals("NZ voice")) {
@@ -262,12 +263,15 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			displayStatistics.start(primaryStage);
 		} catch (Exception e) {}
 	}
-	
+
 	private void displayHighScore() {
 		List<String> scores = ioHelper.readAllLines("user_lists/." 
-		+ currentWordList + "." + currentSubList + ".score");
-		
+				+ currentWordList + "." + currentSubList + ".score");
+
 		StringBuilder score = new StringBuilder();
+		score.append("Fastest Times to Complete\nList: " 
+				+ new UnqualifiedFileString(currentWordList).getUnqualifiedFile() 
+				+ "\nSublist: " + currentSubList + "\n");
 		for (int i = 0; i < 3; i++) {
 			String line = null;
 			try {
