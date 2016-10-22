@@ -27,7 +27,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -130,10 +129,11 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		}
 
 		Label title = new Label("Welcome to VOXSPELL!");
-		title.setFont(new Font("Abyssinica SIL", 16));
+		title.setId("title");
 
 		FlowPane flow = new FlowPane(title);
 		flow.setAlignment(Pos.CENTER);
+		flow.setPadding(new Insets(50));
 
 		BorderPane root = new BorderPane();
 		root.setPadding(new Insets(5));
