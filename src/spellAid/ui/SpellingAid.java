@@ -62,6 +62,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 */
 	private Button newQuiz;
 	private Button viewStatistics;
+	private Button viewHighScore;
 	private Button options;
 	private Button quit;
 
@@ -105,6 +106,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		newQuiz = new Button("New Quiz");
 		viewStatistics = new Button("View Statistics");
+		viewHighScore = new Button("View High Score");
 		options = new Button("Options");
 		quit = new Button("Quit");
 
@@ -113,13 +115,14 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		grid.setVgap(5);
 		grid.add(newQuiz, 0, 0);
 		grid.add(viewStatistics, 0, 1);
-		grid.add(options, 0, 2);
-		grid.add(quit, 0, 3);
+		grid.add(viewHighScore, 0, 2);
+		grid.add(options, 0, 3);
+		grid.add(quit, 0, 4);
 		grid.setAlignment(Pos.CENTER);
 
 		// This simply adds this object as a listener for these buttons
 		// and adds all the buttons to the frame.
-		Button[] buttons = {newQuiz, viewStatistics, quit, options};
+		Button[] buttons = {newQuiz, viewStatistics, viewHighScore, quit, options};
 
 		for (Button btn : buttons){
 			btn.setOnAction(this);
@@ -161,6 +164,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			runNewQuiz();
 		} else if (e.getSource() == viewStatistics) {
 			displayStatistics();
+		} else if (e.getSource() == viewHighScore) {
+			displayHighScore();
 		} else if (e.getSource() == options) {
 			displayOptionsWindow();
 		} else if (e.getSource() == quit) {
@@ -255,6 +260,26 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		Application displayStatistics = new DisplayStatistics(scene, wordlist, sublists, currentWordList, sublists.indexOf(currentSubList));
 		try {
 			displayStatistics.start(primaryStage);
+		} catch (Exception e) {}
+	}
+	
+	private void displayHighScore() {
+		List<String> scores = ioHelper.readAllLines("user_lists/." 
+		+ currentWordList + "." + currentSubList + ".score");
+		
+		StringBuilder score = new StringBuilder();
+		for (int i = 0; i < 3; i++) {
+			String line = null;
+			try {
+				line = scores.get(i);
+			} catch (Exception e) {
+				line = " --";
+			}
+			score.append(i+1 + "." + line + "\n");
+		}
+		Application displayHighScore = new DisplayHighScore(scene, score.toString());
+		try {
+			displayHighScore.start(primaryStage);
 		} catch (Exception e) {}
 	}
 
