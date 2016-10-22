@@ -295,6 +295,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				File listToAdd = fileChooser.showOpenDialog(primaryStage);
 				try {
 					if (isListValid(listToAdd)) {
+						ioHelper.deleteIfExists("user_lists/" + listToAdd.getName());
 						Files.createSymbolicLink(FileSystems.getDefault().getPath("user_lists/" + listToAdd.getName()),
 								FileSystems.getDefault().getPath(listToAdd.getAbsolutePath()));
 					} else {

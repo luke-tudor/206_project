@@ -1,7 +1,10 @@
 package spellAid.ui;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -136,11 +139,31 @@ public abstract class DisplayOptions extends Application {
 	List<String> getAllVisibleFiles(String[] lists) {
 		List<String> files = new ArrayList<>();
 		for (String file : lists) {
-			if (!file.startsWith(".")) {
+			if (!file.startsWith(".") && isListValid(file)) {
 				files.add(file);
 			}
 		}
 		return files;
+	}
+	
+	private boolean isListValid(String list) {
+		Scanner sc = null;
+		Path file = FileSystems.getDefault().getPath("user_lists/" + list);
+		try{
+			sc = new Scanner(file);
+			String firstLine = sc.nextLine();
+			if (firstLine.startsWith("%")) {
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		finally {
+			if (sc != null) {
+				sc.close();
+			}
+		}
+		return false;
 	}
 	
 }
