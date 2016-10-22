@@ -327,6 +327,7 @@ public abstract class Quiz extends Application {
 		else
 			speaker.speak("correct");
 		scorePanel.updateScore(true);
+		scorePanel.oneLess();
 	}
 
 	// If a user failed the first time, give them another chance to answer
@@ -354,6 +355,7 @@ public abstract class Quiz extends Application {
 		else
 			speaker.speak("correct");
 		scorePanel.updateScore(true);
+		scorePanel.oneLess();
 	}
 
 	// If a user failed both times, display a red graphic. Red means fail.
@@ -372,6 +374,7 @@ public abstract class Quiz extends Application {
 		else
 			speaker.speak("incorrect");
 		scorePanel.updateScore(false);
+		scorePanel.oneLess();
 	}
 
 	/*

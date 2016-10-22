@@ -20,6 +20,8 @@ public class ScorePanel extends GridPane {
 	
 	private Label numLeft;
 	
+	private int numberOfWordsLeft;
+	
 	private int numDone;
 	
 	private int numCorrect;
@@ -32,12 +34,13 @@ public class ScorePanel extends GridPane {
 		
 		numDone = 0;
 		numCorrect = 0;
+		numberOfWordsLeft = numWords;
 		
 		currentScore = new Label(numCorrect + "/" + numDone);
 		
 		stopwatch = new Stopwatch();
 		
-		numLeft = new Label(numWords + "");
+		numLeft = new Label(numberOfWordsLeft + "");
 		
 		for (int i = 0; i < labels.length; i++) {
 			add(labels[i], 0, i);
@@ -67,5 +70,10 @@ public class ScorePanel extends GridPane {
 			numCorrect++;
 		}
 		currentScore.setText(numCorrect + "/" + numDone);
+	}
+	
+	public void oneLess() {
+		numberOfWordsLeft--;
+		numLeft.setText(numberOfWordsLeft + "");
 	}
 }
