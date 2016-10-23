@@ -56,7 +56,7 @@ public class VideoEditor extends Application {
 		
 		// Prompt the user if they want to go back to the quiz screen
 		BackButton back = new BackButton();
-		back.setOnAction(e -> {
+		back.setOnAction(e ->
 			Platform.runLater(() -> {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				
@@ -70,8 +70,8 @@ public class VideoEditor extends Application {
 				if (reply.get() == yes) {
 					primaryStage.setScene(parent);
 				}
-			});
-		});
+			})
+		);
 		
 		HBox backPanel = new HBox(back);
 		backPanel.setPadding(new Insets(5));

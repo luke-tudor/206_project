@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -190,24 +191,26 @@ public class DisplayStatistics extends Application {
 	 * This method simply prompts the user to delete all statistics files and clear the table
 	 */
 	private void clearStatistics() {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		Platform.runLater(() -> {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-		ButtonType yes = new ButtonType("Yes");
-		ButtonType no = new ButtonType("No");
+			ButtonType yes = new ButtonType("Yes");
+			ButtonType no = new ButtonType("No");
 
-		alert.getButtonTypes().setAll(yes, no);
-		alert.setTitle("Alert!");
-		alert.setContentText("Are you sure you want to delete all statistics?");
-		
-		Optional<ButtonType> reply = alert.showAndWait();
-		if (reply.get() == yes) {
-			List<String> statsFiles = getAllStatsFiles();
-			ExtendedIOHelper ioHelper = new ExtendedIOHelper();
-			for (String file : statsFiles) {
-				ioHelper.deleteIfExists("user_lists/" + file);
+			alert.getButtonTypes().setAll(yes, no);
+			alert.setTitle("Alert!");
+			alert.setContentText("Are you sure you want to delete all statistics?");
+			
+			Optional<ButtonType> reply = alert.showAndWait();
+			if (reply.get() == yes) {
+				List<String> statsFiles = getAllStatsFiles();
+				ExtendedIOHelper ioHelper = new ExtendedIOHelper();
+				for (String file : statsFiles) {
+					ioHelper.deleteIfExists("user_lists/" + file);
+				}
+				updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
 			}
-			updateStatisticsDisplay(sublistSelectCombo.getSelectionModel().getSelectedIndex());
-		}
+		});
 	}
 	
 	/*
