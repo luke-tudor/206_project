@@ -15,7 +15,7 @@ import spellAid.util.string.URLString;
 /**
  * This class represents a simple high score screen. The high score screen contains
  * a heading, which displays the current list and sublist. The high score screen also
- * contains a label which displays the top 3 times for the sublist. Usernames are also
+ * contains a label which displays the top 3 times for the sublist. User names are also
  * provided if available.
  * 
  * @author Luke Tudor

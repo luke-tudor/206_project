@@ -308,7 +308,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			String line = null;
 			try {
 				String[] chunks = scores.get(i).split("\t");
-				line = " Username: " + chunks[0] + "\t" + "Time: " + chunks[1];
+				line = " User name: " + chunks[0] + "\t" + "Time: " + chunks[1];
 			} catch (Exception e) {
 				line = " --";
 			}
