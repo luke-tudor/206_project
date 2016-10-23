@@ -48,7 +48,6 @@ public abstract class DisplayOptions extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		primaryStage.setTitle("Options");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

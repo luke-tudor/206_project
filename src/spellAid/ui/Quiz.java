@@ -70,7 +70,6 @@ public abstract class Quiz extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		primaryStage.setTitle("New Quiz");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

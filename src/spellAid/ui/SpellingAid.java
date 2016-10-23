@@ -148,6 +148,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		scene = new Scene(root);
 		scene.getStylesheets().add(STYLESHEET);
 		primaryStage.setScene(scene);
+		primaryStage.setTitle("VOXSpell Spelling Aid");
 		primaryStage.show();
 	}
 

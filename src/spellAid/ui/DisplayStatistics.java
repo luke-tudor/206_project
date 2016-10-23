@@ -57,7 +57,6 @@ public class DisplayStatistics extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		primaryStage.setTitle("Statistics");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
