@@ -303,7 +303,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		for (int i = 0; i < 3; i++) {
 			String line = null;
 			try {
-				line = scores.get(i);
+				String[] chunks = scores.get(i).split("\t");
+				line = " Username: " + chunks[0] + "\t" + "Time: " + chunks[1];
 			} catch (Exception e) {
 				line = " --";
 			}
