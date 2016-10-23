@@ -34,6 +34,8 @@ import spellAid.util.string.URLString;
  * Displays the statistics window and allows users to select 
  * what statistics level they wish to view.
  * 
+ * This class uses a JavaFX table to display all statistics.
+ * 
  * @author Aprajit Gandhi and Luke Tudor
  */
 public class DisplayStatistics extends Application {
@@ -61,6 +63,9 @@ public class DisplayStatistics extends Application {
 		primaryStage.show();
 	}
 
+	/*
+	 * Constructs a table with the currently selected list as the data model.
+	 */
 	public DisplayStatistics(Scene parent, List<Set<String>> wordlist, List<String> sublists, String currentList, int currentLevel) {
 		super();
 
@@ -86,6 +91,7 @@ public class DisplayStatistics extends Application {
 		controls.setHgap(5);
 		controls.add(sublistSelectCombo, 0, 0);
 		
+		// Setting the columns of the table to use the nested "row" class, 'WordStats' as the data model
 		TableColumn<WordStats, String> wordNameCol = new TableColumn<>("Word");
 		wordNameCol.setMinWidth(200);
 		wordNameCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("word"));
@@ -180,6 +186,9 @@ public class DisplayStatistics extends Application {
 		table.setItems(data);
 	}
 	
+	/*
+	 * This method simply prompts the user to delete all statistics files and clear the table
+	 */
 	private void clearStatistics() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -189,6 +198,7 @@ public class DisplayStatistics extends Application {
 		alert.getButtonTypes().setAll(yes, no);
 		alert.setTitle("Alert!");
 		alert.setContentText("Are you sure you want to delete all statistics?");
+		
 		Optional<ButtonType> reply = alert.showAndWait();
 		if (reply.get() == yes) {
 			List<String> statsFiles = getAllStatsFiles();

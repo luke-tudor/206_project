@@ -27,8 +27,8 @@ import spellAid.util.string.URLString;
 import spellAid.util.string.UnqualifiedFileString;
 
 /**
- * Creates a Frame that allows the user to choose what voice they want
- * and what difficulty level they want.
+ * Displays the options for the user. In particular, from this screen a user can
+ * change the voice, current list, or current sublist
  * 
  * @author Aprajit Gandhi and Luke Tudor
  *
@@ -53,11 +53,11 @@ public abstract class DisplayOptions extends Application {
 	}
 
 	/*
-	 * Constructs the options frame providing all the dependencies from the parent class.
+	 * Constructs the options frame and provides all the dependencies from the parent class.
 	 */
 	public DisplayOptions(Scene parent, String[] lists, String currentList, List<String> sublists, String currentSubList, String currentSpeech) {
 		super();
-		
+
 		List<String> voices = new ArrayList<>();
 		voices.add("NZ voice");
 		voices.add("USA voice");
@@ -79,7 +79,7 @@ public abstract class DisplayOptions extends Application {
 		voiceCombo.setOnAction(e -> changeSpeech(voiceCombo.getSelectionModel().getSelectedItem()));
 		listCombo.setOnAction(e -> changeList(listCombo.getSelectionModel().getSelectedItem()));
 		sublistCombo.setOnAction(e -> changeSublist(sublistCombo.getSelectionModel().getSelectedItem()));
-		
+
 		GridPane grid = new GridPane();
 		grid.setHgap(5);
 		grid.setVgap(5);
@@ -101,20 +101,22 @@ public abstract class DisplayOptions extends Application {
 		HBox hbox = new HBox(back);
 		hbox.setPadding(new Insets(5));
 		hbox.setAlignment(Pos.TOP_LEFT);
-		
+
 		Button addList = new Button("Add List");
 		addList.setOnAction(e -> addList());
-		
+
+		// Allows the user to test the chosen voice to see if they like it
 		Button testVoice = new Button("Test Voice");
 		testVoice.setOnAction(e -> {
 			Speaker speaker = new ConcurrentAsynchronousSpeaker(
-					new AsynchronousComponentEnabler(new Node[]{testVoice}, true), getVoice(voiceCombo.getSelectionModel().getSelectedItem())) {
+					new AsynchronousComponentEnabler(
+							new Node[]{testVoice}, true), getVoice(voiceCombo.getSelectionModel().getSelectedItem())) {
 				@Override
 				protected void asynchronousFinish() {}
 			};
 			speaker.speak("This is the " + voiceCombo.getSelectionModel().getSelectedItem());
 		});
-		
+
 		VBox vbox = new VBox(grid, addList, testVoice);
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setSpacing(5);
@@ -129,12 +131,14 @@ public abstract class DisplayOptions extends Application {
 
 	}
 
+	// Template method pattern used to perform functionality this class cannot do by itself
 	protected abstract void changeSpeech(String voice);
 	protected abstract void changeSublist(String sublist);
 	protected abstract void changeList(String list);
 	protected abstract void addList();
 	protected abstract String getVoice(String selection);
-	
+
+	// Returns all files that can be a valid list
 	List<String> getAllVisibleFiles(String[] lists) {
 		List<String> files = new ArrayList<>();
 		for (String file : lists) {
@@ -144,7 +148,8 @@ public abstract class DisplayOptions extends Application {
 		}
 		return files;
 	}
-	
+
+	// Determines if a spelling list is valid or not
 	private boolean isListValid(String list) {
 		Scanner sc = null;
 		Path file = FileSystems.getDefault().getPath("user_lists/" + list);
@@ -164,5 +169,5 @@ public abstract class DisplayOptions extends Application {
 		}
 		return false;
 	}
-	
+
 }
