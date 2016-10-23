@@ -12,6 +12,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import spellAid.util.string.URLString;
 
+/**
+ * This class represents a simple high score screen. The high score screen contains
+ * a heading, which displays the current list and sublist. The high score screen also
+ * contains a label which displays the top 3 times for the sublist. Usernames are also
+ * provided if available.
+ * 
+ * @author Luke Tudor
+ */
 public class DisplayHighScore extends Application {
 	
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
