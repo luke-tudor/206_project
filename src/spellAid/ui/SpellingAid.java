@@ -253,8 +253,11 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				String fileName = "user_lists/." 
 						+ unqWordList + "." + currentSubList + ".score.txt";
 				List<String> scores = ioHelper.readAllLines(fileName);
-				String line = System.getProperty("user.name") + "\t" 
-						+ time ;
+				String userName = "Unknown";
+				try {
+					userName = System.getProperty("user.name");
+				} catch (Exception e) {}
+				String line = userName + "\t" + time ;
 
 				int i;
 				for (i = 0; i < 3; i++) {
@@ -297,9 +300,9 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		List<String> scores = ioHelper.readAllLines("user_lists/." 
 				+ unqWordList + "." + currentSubList + ".score.txt");
 
+		String heading = "Fastest Times to Complete\nList: " 
+				+ unqWordList + "\nSublist: " + currentSubList + "\n";
 		StringBuilder score = new StringBuilder();
-		score.append("Fastest Times to Complete\nList: " 
-				+ unqWordList + "\nSublist: " + currentSubList + "\n");
 		for (int i = 0; i < 3; i++) {
 			String line = null;
 			try {
@@ -310,7 +313,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			}
 			score.append(i+1 + "." + line + "\n");
 		}
-		Application displayHighScore = new DisplayHighScore(scene, score.toString());
+		Application displayHighScore = new DisplayHighScore(scene, score.toString(), heading);
 		try {
 			displayHighScore.start(primaryStage);
 		} catch (Exception e) {}

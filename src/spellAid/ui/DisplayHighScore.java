@@ -28,12 +28,14 @@ public class DisplayHighScore extends Application {
 		primaryStage.show();
 	}
 	
-	public DisplayHighScore(Scene parent, String score) {
+	public DisplayHighScore(Scene parent, String score, String heading) {
 		super();
+		
+		Label headingLabel = new Label(heading);
 		
 		Label scoreLabel = new Label(score);
 		
-		VBox vbox = new VBox(scoreLabel);
+		VBox vbox = new VBox(headingLabel, scoreLabel);
 		vbox.setSpacing(5);
 		vbox.setPadding(new Insets(5));
 		vbox.setAlignment(Pos.CENTER);
