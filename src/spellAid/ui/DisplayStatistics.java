@@ -97,15 +97,15 @@ public class DisplayStatistics extends Application {
 		wordNameCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("word"));
 		
 		TableColumn<WordStats, String> masteredCol = new TableColumn<>("Mastered");
-		masteredCol.setMinWidth(100);
+		masteredCol.setMinWidth(150);
 		masteredCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesMastered"));
 		
 		TableColumn<WordStats, String> faultedCol = new TableColumn<>("Faulted");
-		faultedCol.setMinWidth(100);
+		faultedCol.setMinWidth(150);
 		faultedCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesFaulted"));
 		
 		TableColumn<WordStats, String> failedCol = new TableColumn<>("Failed");
-		failedCol.setMinWidth(100);
+		failedCol.setMinWidth(150);
 		failedCol.setCellValueFactory(new PropertyValueFactory<WordStats, String>("timesFailed"));
 		
 		table.setPlaceholder(new Label("No statistics to display"));
@@ -210,6 +210,9 @@ public class DisplayStatistics extends Application {
 		}
 	}
 	
+	/*
+	 * Abstraction to get all hidden files in the directory easily.
+	 */
 	private List<String> getAllStatsFiles() {
 		String[] lists = FileSystems.getDefault().getPath("user_lists").toFile().list();
 		List<String> files = new ArrayList<>();
@@ -247,24 +250,24 @@ public class DisplayStatistics extends Application {
 			this.word.set(word);
 		}
 		
-		public String getTimesMastered() {
-			return timesMastered.get();
+		public int getTimesMastered() {
+			return Integer.parseInt(timesMastered.get());
 		}
 
 		public void setTimesMastered(String timesMastered) {
 			this.timesMastered.set(timesMastered);
 		}
 		
-		public String getTimesFaulted() {
-			return timesFaulted.get();
+		public int getTimesFaulted() {
+			return Integer.parseInt(timesFaulted.get());
 		}
 		
 		public void setTimesFaulted(String timesFaulted) {
 			this.timesMastered.set(timesFaulted);
 		}
 
-		public String getTimesFailed() {
-			return timesFailed.get();
+		public int getTimesFailed() {
+			return Integer.parseInt(timesFailed.get());
 		}
 		
 		public void setTimesFailed(String timesFailed) {
