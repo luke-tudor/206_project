@@ -1,3 +1,8 @@
+/* This style sheet is used primarily for very repetitive styling.
+   Less repetitive styling is done from within Java.
+
+   Author: Luke Tudor
+*/
 
 .root {
 	/*-fx-background-color: #CCFF99;*/

@@ -27,12 +27,12 @@ import spellAid.ui.video.VideoEditor;
 import spellAid.util.string.URLString;
 
 /**
- * This class creates and runs the testing frame that the user sees when the 
- * "New Quiz" button is pressed. This class provides three JPanels, a graphical 
- * output panel, an input panel that contains a JButton and JTextField and a 
+ * This class creates and runs the testing panel that the user sees when the 
+ * "New Quiz" button is pressed. This class provides three panels, a graphical 
+ * output panel, an input panel that contains a button and text field, and a 
  * panel which displays a video player.
  * 
- * The methods in this class are in the order that these methods are used.
+ * The methods in this class are in the order that they are used.
  * 
  * @author Luke Tudor and Aprajit Gandhi
  */
@@ -74,8 +74,9 @@ public abstract class Quiz extends Application {
 		primaryStage.show();
 	}
 
-	// This constructor takes two parameters, the name of the JFrame, and the
-	// list of words to be tested.
+	/*
+	 * Constructs a pane with the list and current voice provided.
+	 */
 	public Quiz(Scene parent, String[] list, String currentSpeech) {
 		// Creates a JFrame and sets all the GUI fields.
 		super();
@@ -125,6 +126,7 @@ public abstract class Quiz extends Application {
 		voices.add("NZ voice");
 		voices.add("USA voice");
 		
+		// Allows user to select the voice whenever they want
 		ComboBox<String> selectVoice = new ComboBox<>(FXCollections.observableList(voices));
 		selectVoice.getSelectionModel().select(currentSpeech);
 		selectVoice.setOnAction(e -> changeVoice(selectVoice.getSelectionModel().getSelectedItem()));
@@ -133,6 +135,7 @@ public abstract class Quiz extends Application {
 		quizPanel.setPadding(new Insets(5));
 		quizPanel.setSpacing(5);
 
+		// Allows user to confirm if they want to go back to the main menu
 		BackButton back = new BackButton();
 		back.setOnAction(e -> {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -176,6 +179,7 @@ public abstract class Quiz extends Application {
 		textField.selectAll();
 	}
 
+	// This method is run every time a user wants to enter a word
 	private void wordEntered() {
 		if (testButton.getText().equals(ENTER)) {
 
@@ -237,6 +241,7 @@ public abstract class Quiz extends Application {
 		return testList[currentTestNum];
 	}
 
+	// The template method pattern is used to delegate responsibilities to subclass
 	protected abstract void passedFirstTime();
 
 	protected abstract void failedFirstTime();
@@ -310,7 +315,8 @@ public abstract class Quiz extends Application {
 	 * depending on how the user answered the question, and how many tries
 	 * the user needed. In all cases, the state of the quiz object is updated.
 	 * This is either done by incrementing the test number or removing a chance
-	 * the user had for answering the question.
+	 * the user had for answering the question. The logic in these methods is 
+	 * separated from each other to provide a better abstraction.
 	 */
 
 	// If user passed first time, tell the user they are correct and display
@@ -380,13 +386,14 @@ public abstract class Quiz extends Application {
 
 	/*
 	 * Helper method to verify that the user spelled the word correctly
-	 * regardless of spelling.
+	 * regardless of case.
 	 */
 	private boolean isSpelledCorrectly(){
 		return textField.getText().toLowerCase().equals(
 				testList[currentTestNum].toLowerCase());
 	}
 	
+	// Changes the voice by changing the speaker object
 	private void changeVoice(String voice) {
 		String scriptFile = selectVoice(voice);
 		speaker = new ConcurrentAsynchronousSpeaker(enabledList, scriptFile) {

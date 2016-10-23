@@ -6,13 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 /**
- * This class represents a simple scoring panel for the user with a stop watch.
+ * This class represents a simple scoring panel for the user.
  * 
  * @author Luke Tudor
  */
 public class ScorePanel extends GridPane {
-	
-	private Label[] labels;
 	
 	private Label currentScore;
 	
@@ -25,11 +23,12 @@ public class ScorePanel extends GridPane {
 	private int numDone;
 	
 	private int numCorrect;
-
+	
+	// Constructs a simple panel to display the number of words correct, the time taken, and the number of words left.
 	public ScorePanel(int numWords) {
 		super();
 		
-		labels = new Label[]{new Label("Number of words correct:"),
+		Label[] labels = new Label[]{new Label("Number of words correct:"),
 				new Label("Time:"), new Label("Number of words left:")};
 		
 		numDone = 0;

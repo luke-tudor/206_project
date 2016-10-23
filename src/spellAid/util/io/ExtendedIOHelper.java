@@ -32,6 +32,7 @@ public class ExtendedIOHelper extends IOHelper {
 		super.overwriteFile(lines, string2path(path));
 	}
 	
+	// Converts a string path to an actual path
 	private Path string2path(String path) {
 		return FileSystems.getDefault().getPath(path);
 	}

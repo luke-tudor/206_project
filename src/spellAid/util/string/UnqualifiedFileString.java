@@ -2,6 +2,7 @@ package spellAid.util.string;
 
 /**
  * This class turns a qualified file path into an unqualified file path.
+ * For example, foo/bar.txt -> bar.txt.
  * 
  * @author Luke Tudor
  */

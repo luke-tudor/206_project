@@ -242,6 +242,7 @@ public class DisplayStatistics extends Application {
 			this.timesFailed = new SimpleStringProperty(timesFailed + "");
 		}
 
+		// A lot of getters and setters used by the JavaFX framework to correctly display a table
 		public String getWord() {
 			return word.get();
 		}

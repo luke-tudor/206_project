@@ -15,6 +15,11 @@ import spellAid.ui.AppDim;
 import spellAid.ui.BackButton;
 import spellAid.util.string.URLString;
 
+/**
+ * This class is a combined video viewer and editor.
+ * 
+ * @author Luke Tudor
+ */
 public class VideoEditor extends Application {
 	
 	private static final String STYLESHEET = new URLString("style/mainstyle.css").getURL();
@@ -48,6 +53,7 @@ public class VideoEditor extends Application {
 			}
 		};
 		
+		// Prompt the user if they want to go back to the quiz screen
 		BackButton back = new BackButton();
 		back.setOnAction(e -> {
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

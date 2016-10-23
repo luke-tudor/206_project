@@ -14,14 +14,14 @@ import javafx.scene.media.MediaView;
 import spellAid.util.string.URLString;
 
 /**
- * This class creates and shows a video using VLC media player.
+ * This class creates and shows a video using JavaFX media player.
  * 
  * @author Luke Tudor
  *
  */
 public class VideoPanel extends BorderPane {
 	
-	private static String BUNNYPATH = "videos/big_buck_bunny_1_minute.mp4";
+	private static final String BUNNYPATH = "videos/big_buck_bunny_1_minute.mp4";
 
 	private MediaPlayer player;
 
@@ -44,6 +44,8 @@ public class VideoPanel extends BorderPane {
 		setVideo(BUNNYPATH);
 
 		setBottom(btnPanel);
+		
+		// Set CSS id
 		setId("videoPane");
 	}
 
@@ -61,6 +63,7 @@ public class VideoPanel extends BorderPane {
 		player.dispose();
 	}
 	
+	// Sets the requested video to be displayed by this component
 	public void setVideo(String videoPath) {
 		
 		btnPanel.reset();
@@ -81,6 +84,11 @@ public class VideoPanel extends BorderPane {
 		setCenter(contentPanel);
 	}
 
+	/**
+	 * Class used to control the video player with buttons to perform various functions.
+	 * 
+	 * @author Luke Tudor
+	 */
 	private class ButtonPanel extends FlowPane implements EventHandler<ActionEvent> {
 
 		private static final String MUTEXT = "Mute";

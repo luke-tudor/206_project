@@ -82,7 +82,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	private String currentWordList;  
 
-
 	//currentSpeech is just the text on the combobox of the current voice
 	private String currentSpeech;
 
@@ -129,7 +128,6 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			btn.setOnAction(this);
 			btn.setPrefWidth(400);
 			btn.setPrefHeight(100);
-			btn.getStylesheets().add(STYLESHEET);
 		}
 
 		Label title = new Label("Welcome to VOXSPELL!");
@@ -180,21 +178,8 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * help of some collaborating classes.
 	 */
 	private void runNewQuiz() {
-		// This line converts the word list file to a list.
+		// This line converts the word list to a set.
 		Set<String> uniqueLines = wordlist.get(sublists.indexOf(currentSubList));
-
-		/*
-		 *  If the list is empty, then the file contained nothing or didn't exist.
-		 *  In either case, this conditional tells the user to provide a word
-		 *  list.
-		 */
-		if (uniqueLines.isEmpty()){
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setTitle("Alert!");
-			alert.setContentText("Please provide some words in the selected list.");
-			alert.showAndWait();
-			return;
-		}
 
 		int numTests = 10;
 
@@ -248,11 +233,13 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				}
 			}
 
+			// This method updates the current high score for a particular sublist
+			// This is done by creating a new file that contains the user name and the time taken
+			// The file is ordered by the time taken
 			@Override
 			protected void updateHighScore(String time) {
 				String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
-				String fileName = "user_lists/." 
-						+ unqWordList + "." + currentSubList + ".score.txt";
+				String fileName = "user_lists/." + unqWordList + "." + currentSubList + ".score.txt";
 				List<String> scores = ioHelper.readAllLines(fileName);
 				String userName = "Unknown";
 				try {
@@ -296,6 +283,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		} catch (Exception e) {}
 	}
 
+	/*
+	 * This method takes the current high score file, which corresponds to the current sublist,
+	 * and formats the contents of the file so that a list of high scores is displayed.
+	 */
 	private void displayHighScore() {
 		String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
 		List<String> scores = ioHelper.readAllLines("user_lists/." 
@@ -303,6 +294,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		String heading = "Fastest Times to Complete\nList: " 
 				+ unqWordList + "\nSublist: " + currentSubList + "\n";
+		
 		StringBuilder score = new StringBuilder();
 		for (int i = 0; i < 3; i++) {
 			String line = null;
@@ -320,6 +312,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		} catch (Exception e) {}
 	}
 
+	/*
+	 * This method changes the settings for the main application class.
+	 * Because of this, the template method pattern is used heavily to set the fields of this class.
+	 */
 	private void displayOptionsWindow() {
 		Application displayOptions =
 				new DisplayOptions(scene, wordlists, currentWordList, sublists, currentSubList, currentSpeech) {
@@ -349,6 +345,12 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 				sublistCombo.getSelectionModel().select(currentSubList);
 			}
 
+			/*
+			 * This method adds a user created list to the pool of available lists.
+			 * If the list is invalid, an error message is displayed instead.
+			 * If a list to be added has the same name as another list, the old list is deleted
+			 * and the new list replaces the old list.
+			 */
 			@Override
 			protected void addList() {
 				FileChooser fileChooser = new FileChooser();
@@ -396,6 +398,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		} catch (Exception e) {}
 	}
 
+	// This method prompts the user to quit the application
 	private void quit() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -411,6 +414,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		}
 	}
 
+	// Helper method to create the current word list
 	private void createWordList() {
 		List<String> unfilteredList = ioHelper.readAllLines(currentWordList);
 		wordlist = new ArrayList<Set<String>>();
@@ -431,6 +435,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		} catch (Exception e) {}
 	}
 
+	// Helper method to determine if a list is valid
 	private boolean isListValid(File file) {
 		if (file == null) {
 			throw new NullPointerException();

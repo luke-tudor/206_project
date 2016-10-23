@@ -33,6 +33,7 @@ public class Stopwatch extends Label {
 		timer.stop();
 	}
 
+	// Format the time according to hh:mm:ss
 	private void updateTime() {
 		long secDiff = (System.nanoTime() - startTime)/1_000_000_000;
 		setText(String.format("%02d:%02d:%02d", secDiff/3600%24, secDiff/60%60, secDiff%60));

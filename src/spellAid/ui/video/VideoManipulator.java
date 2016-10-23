@@ -21,6 +21,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * This class is a GUI video editor that uses FFMPEG to manipulate a video
+ * in some way specified by the user.
+ * 
+ * @author Luke Tudor
+ */
 public class VideoManipulator extends VBox {
 
 	private Button submit;
@@ -62,6 +68,7 @@ public class VideoManipulator extends VBox {
 		timer.play();
 	}
 
+	// Renders the video with a thread worker when prompted by the user
 	private void createVideo() {
 
 		submit.setDisable(true);
@@ -102,6 +109,7 @@ public class VideoManipulator extends VBox {
 
 	void doWhenFinished() {}
 
+	// Uses file size heuristic to determine progress
 	private void updateProgress() {
 		if (processFinished) {
 			progressBar.setProgress(1);
@@ -110,6 +118,13 @@ public class VideoManipulator extends VBox {
 		}
 	}
 
+	/**
+	 * This class provides the controls for the user to edit the video.
+	 * The user can change the FPS, negate the colours, or change the contrast, brightness or saturation.
+	 * A progress bar is also used to monitor rendering progress.
+	 * 
+	 * @author Luke Tudor
+	 */
 	private class ControlPanel extends VBox {
 		
 		private RadioButton negate;
@@ -164,6 +179,10 @@ public class VideoManipulator extends VBox {
 			setAlignment(Pos.CENTER);
 		}
 
+		/*
+		 * Used by the video manipulator class to get the user specified settings from the 
+		 * GUI components.
+		 */
 		private String getSettings() {
 			StringBuilder sb = new StringBuilder();
 			sb.append(" -vf eq=contrast=" + sliders[0].getValue() 

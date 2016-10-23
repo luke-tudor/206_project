@@ -14,13 +14,8 @@ import java.util.Set;
 /**
  * This class provides a list of list of methods for the SpellingAid class to use
  * for file processing. This class handles exceptions and more complex file I/O
- * operations so that the SpellingAid class isn't cluttered with file processing
+ * operations so that the other classes aren't cluttered with file processing
  * statements.
- * 
- * Since this class uses the java.nio (non-blocking I/O) package, the Event
- * Dispatch Thread can perform these tasks without making the GUI appear
- * unresponsive. This is because the EDT can perform other tasks while waiting for
- * I/O to complete.
  * 
  * The methods in this class are in alphabetical order.
  * 
@@ -92,6 +87,10 @@ public class IOHelper {
 		} catch (IOException e) {}
 	}
 	
+	/*
+	 * This method simply writes a file using the list as input and file name as
+	 * the destination.
+	 */
 	public void overwriteFile(List<String> lines, Path filename) {
 		try {
 			Files.write(filename, lines, CHARSET);

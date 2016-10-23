@@ -2,7 +2,7 @@ package spellAid.util.string;
 
 /**
  * This class turns a qualified file path into the same path with a '.' in front
- * of the unqualified file name.
+ * of the unqualified file name. For example, foo/bar.txt -> foo/.bar.txt.
  * 
  * @author Luke Tudor
  */

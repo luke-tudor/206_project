@@ -6,7 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 /**
- * This class uses swing worker to speak a particular line without freezing the
+ * This class uses thread worker to speak a particular line without freezing the
  * GUI.
  * 
  * @author Luke Tudor
@@ -42,7 +42,7 @@ public abstract class ConcurrentAsynchronousSpeaker implements Speaker {
 
 				try {
 
-					final Process process = processBuilder.start();
+					Process process = processBuilder.start();
 
 					// Wait for festival to finish speaking before continuing.
 					final int exitVal = process.waitFor();

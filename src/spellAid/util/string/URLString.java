@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 
 /**
- * This class constructs a string representation of a URL from a relative path
+ * This class constructs a string representation of a URL from a relative path.
  * 
  * @author Luke Tudor
  */
