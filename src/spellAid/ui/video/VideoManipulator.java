@@ -189,7 +189,7 @@ public class VideoManipulator extends VBox {
 					+ ":brightness=" + sliders[1].getValue() 
 					+ ":saturation=" + sliders[2].getValue());
 			if (negate.isSelected()) {
-				sb.append(" -vf negate");
+				sb.append(",negate");
 			}
 			sb.append(" -r " + fps.getValue());
 			return sb.toString();
