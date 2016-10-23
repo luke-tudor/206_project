@@ -107,7 +107,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 		newQuiz = new Button("New Quiz");
 		viewStatistics = new Button("View Statistics");
-		viewHighScore = new Button("View High Score");
+		viewHighScore = new Button("View High Scores");
 		options = new Button("Options");
 		quit = new Button("Quit");
 
@@ -248,15 +248,31 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 			}
 
 			@Override
-			protected void updateHighScore(String time) {/*
+			protected void updateHighScore(String time) {
 				String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
-				List<String> scores = ioHelper.readAllLines("user_lists/." 
-						+ unqWordList + "." + currentSubList + ".score");
-				if (scores.size() != 3) {
-					String line = 
-					ioHelper.addLineToFile(line, "user_lists/." 
-							+ unqWordList + "." + currentSubList + ".score");
-				}*/
+				String fileName = "user_lists/." 
+						+ unqWordList + "." + currentSubList + ".score.txt";
+				List<String> scores = ioHelper.readAllLines(fileName);
+				String line = System.getProperty("user.name") + "\t" 
+						+ time ;
+
+				int i;
+				for (i = 0; i < 3; i++) {
+					String oldTime = null;
+					try {
+						oldTime = scores.get(i).split("\t")[1];
+					} catch (Exception e) {
+						break;
+					}
+					if (time.compareTo(oldTime) < 0 ) {
+						break;
+					}
+				}
+				scores.add(i, line);
+				try {
+					scores.remove(3);
+				} catch (Exception e) {}
+				ioHelper.overwriteFile(scores, fileName);
 			}
 
 		};
@@ -279,7 +295,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	private void displayHighScore() {
 		String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
 		List<String> scores = ioHelper.readAllLines("user_lists/." 
-				+ unqWordList + "." + currentSubList + ".score");
+				+ unqWordList + "." + currentSubList + ".score.txt");
 
 		StringBuilder score = new StringBuilder();
 		score.append("Fastest Times to Complete\nList: " 

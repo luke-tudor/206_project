@@ -28,6 +28,10 @@ public class ExtendedIOHelper extends IOHelper {
 		super.removeLineFromFile(line, string2path(path));
 	}
 	
+	public void overwriteFile(List<String> lines, String path) {
+		super.overwriteFile(lines, string2path(path));
+	}
+	
 	private Path string2path(String path) {
 		return FileSystems.getDefault().getPath(path);
 	}

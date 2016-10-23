@@ -175,8 +175,6 @@ public abstract class Quiz extends Application {
 		// Select text field
 		textField.requestFocus();
 		textField.selectAll();
-
-		scorePanel.startTimer();
 	}
 
 	private void wordEntered() {
@@ -216,6 +214,7 @@ public abstract class Quiz extends Application {
 			 * button so that the user is now prompted to enter the answer.
 			 */
 		} else {
+			scorePanel.startTimer();
 			testButton.setText(ENTER);
 			enabledList.setShouldComponentBeEnabled(repeatButton, true);
 			speaker.speak("please spell " + testList[currentTestNum]);
@@ -257,8 +256,6 @@ public abstract class Quiz extends Application {
 	private void quizComplete() {
 
 		scorePanel.stopTimer();
-		
-		updateHighScore(scorePanel.getTime());
 
 		// number of correct words
 		int numCorrect = 0;
@@ -269,6 +266,8 @@ public abstract class Quiz extends Application {
 		}
 
 		if (numCorrect == testList.length) {
+			
+			updateHighScore(scorePanel.getTime());
 
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -338,8 +337,7 @@ public abstract class Quiz extends Application {
 	// correctly.
 	private void firstTimeFailure(){
 		failedFirstTime();
-		speaker.speak("incorrect, try once more. " + testList[currentTestNum] +
-				". " + testList[currentTestNum]);
+		speaker.speak("incorrect, try once more. " + testList[currentTestNum]);
 		hasChance = false;
 	}
 
@@ -347,7 +345,7 @@ public abstract class Quiz extends Application {
 	// Yellow means fault.
 	private void secondTimePass(){
 		passedSecondTime();
-		enabledList.setShouldComponentBeEnabled(repeatButton, false);
+		enabledList.setShouldComponentBeEnabled(repeatButton, true);
 		repeatButton.setDisable(true);
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewTickShape(),
 				testList[currentTestNum]);
@@ -365,7 +363,7 @@ public abstract class Quiz extends Application {
 	// If a user failed both times, display a red graphic. Red means fail.
 	private void secondTimeFailure(){
 		failedSecondTime();
-		enabledList.setShouldComponentBeEnabled(repeatButton, false);
+		enabledList.setShouldComponentBeEnabled(repeatButton, true);
 		repeatButton.setDisable(true);
 		textField.clear();
 		graphicsPanel.updateGraphic(currentTestNum, gFac.getNewCrossShape(),

@@ -91,4 +91,10 @@ public class IOHelper {
 			Files.write(filename, fileLines, CHARSET);
 		} catch (IOException e) {}
 	}
+	
+	public void overwriteFile(List<String> lines, Path filename) {
+		try {
+			Files.write(filename, lines, CHARSET);
+		} catch (IOException e) {}
+	}
 }
