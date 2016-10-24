@@ -288,25 +288,7 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 	 * and formats the contents of the file so that a list of high scores is displayed.
 	 */
 	private void displayHighScore() {
-		String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
-		List<String> scores = ioHelper.readAllLines("user_lists/." 
-				+ unqWordList + "." + currentSubList + ".score.txt");
-
-		String heading = "Fastest Times to Complete\nList: " 
-				+ unqWordList + "\nSublist: " + currentSubList + "\n";
-		
-		StringBuilder score = new StringBuilder();
-		for (int i = 0; i < 3; i++) {
-			String line = null;
-			try {
-				String[] chunks = scores.get(i).split("\t");
-				line = " User name: " + chunks[0] + "\t" + "Time: " + chunks[1];
-			} catch (Exception e) {
-				line = " --";
-			}
-			score.append(i+1 + "." + line + "\n");
-		}
-		Application displayHighScore = new DisplayHighScore(scene, score.toString(), heading);
+		Application displayHighScore = new DisplayHighScore(scene, currentWordList, currentSubList, sublists);
 		try {
 			displayHighScore.start(primaryStage);
 		} catch (Exception e) {}
