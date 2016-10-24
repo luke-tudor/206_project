@@ -68,6 +68,7 @@ public class VideoEditor extends Application {
 				alert.setContentText("Are you sure you want to go back to the quiz?");
 				Optional<ButtonType> reply = alert.showAndWait();
 				if (reply.get() == yes) {
+					vp.stop();
 					primaryStage.setScene(parent);
 				}
 			})
