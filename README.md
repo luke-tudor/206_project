@@ -11,3 +11,5 @@ bash Runner.sh
 
 4. If that doesn't work, try the following command:
 /usr/lib/jvm/jdk1.8.0_91/bin/java -cp bin spellAid.ui.SpellingAid
+
+5. If that doesn't work, please change the JDK used in the script file, to a JDK that is downloaded on your computer. If you don't have a JDK installed, download one from the internet.
