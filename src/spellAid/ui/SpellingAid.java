@@ -147,6 +147,10 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 		scene.getStylesheets().add(STYLESHEET);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("VOXSpell Spelling Aid");
+		primaryStage.setOnCloseRequest(e -> {
+			e.consume();
+			quit();
+		});
 		primaryStage.show();
 	}
 
@@ -382,20 +386,18 @@ public class SpellingAid extends Application implements EventHandler<ActionEvent
 
 	// This method prompts the user to quit the application
 	private void quit() {
-		Platform.runLater(() -> {
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-			ButtonType yes = new ButtonType("Yes");
-			ButtonType no = new ButtonType("No");
+		ButtonType yes = new ButtonType("Yes");
+		ButtonType no = new ButtonType("No");
 
-			alert.getButtonTypes().setAll(yes, no);
-			alert.setTitle("Alert!");
-			alert.setContentText("Are you sure you want to quit?");
-			Optional<ButtonType> reply = alert.showAndWait();
-			if (reply.get() == yes) {
-				primaryStage.hide();
-			}
-		});
+		alert.getButtonTypes().setAll(yes, no);
+		alert.setTitle("Alert!");
+		alert.setContentText("Are you sure you want to quit?");
+		Optional<ButtonType> reply = alert.showAndWait();
+		if (reply.get() == yes) {
+			primaryStage.hide();
+		}
 	}
 
 	// Helper method to create the current word list
