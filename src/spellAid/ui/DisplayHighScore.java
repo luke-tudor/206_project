@@ -87,6 +87,7 @@ public class DisplayHighScore extends Application {
 		scene = new Scene(root);
 	}
 	
+	// This method updates the labels to use the correct word list and sub list for display
 	private void changeDisplay(String currentWordList, String currentSubList) {
 		String unqWordList = new UnqualifiedFileString(currentWordList).getUnqualifiedFile();
 		List<String> scores = ioHelper.readAllLines("user_lists/." 

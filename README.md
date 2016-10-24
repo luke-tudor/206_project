@@ -9,3 +9,5 @@ To run the VOXSpell program, follow these steps (assuming you are using UG4 linu
 3. Run this command in the terminal:
 bash Runner.sh
 
+4. If that doesn't work, try the following command:
+/usr/lib/jvm/jdk1.8.0_91/bin/java -cp bin spellAid.ui.SpellingAid
